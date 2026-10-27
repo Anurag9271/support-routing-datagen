@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+.idea/
+.vscode/
+# generated full-scale output is reproducible from the seed; keep only samples committed
+data/full/
