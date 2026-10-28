@@ -8,3 +8,5 @@ venv/
 .vscode/
 # generated full-scale output is reproducible from the seed; keep only samples committed
 data/full/
+data/_check/
+data/raw/*.csv
