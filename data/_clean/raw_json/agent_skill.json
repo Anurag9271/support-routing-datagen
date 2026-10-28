@@ -1,0 +1,492 @@
+[
+  {
+    "agent_id": "AGT-000001",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-11-14",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000001",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-11-14",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000002",
+    "skill_id": "SKL-TECH",
+    "proficiency": "BASIC",
+    "effective_from": "2024-09-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000003",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-02-07",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000004",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "BASIC",
+    "effective_from": "2019-06-28",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000004",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2026-04-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000004",
+    "skill_id": "SKL-SALES",
+    "proficiency": "BASIC",
+    "effective_from": "2026-03-20",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000005",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "BASIC",
+    "effective_from": "2024-06-18",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000005",
+    "skill_id": "SKL-TECH",
+    "proficiency": "BASIC",
+    "effective_from": "2024-06-18",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000006",
+    "skill_id": "SKL-SALES",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2025-12-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000007",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-10-09",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000007",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-10-09",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000007",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-10-09",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000008",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-07-15",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000008",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-07-15",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000008",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-07-15",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000009",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2019-10-07",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000009",
+    "skill_id": "SKL-SALES",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2019-10-07",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000010",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "BASIC",
+    "effective_from": "2024-01-25",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000010",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-01-25",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000011",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2022-01-13",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000012",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2026-01-20",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000012",
+    "skill_id": "SKL-SALES",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2022-08-23",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000013",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2021-07-31",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000013",
+    "skill_id": "SKL-SALES",
+    "proficiency": "BASIC",
+    "effective_from": "2026-04-02",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000014",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2025-12-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000015",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "BASIC",
+    "effective_from": "2026-03-01",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000015",
+    "skill_id": "SKL-SALES",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-09-22",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000016",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2021-03-10",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000016",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2021-03-10",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000016",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2021-03-10",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000017",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2024-01-01",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000018",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "BASIC",
+    "effective_from": "2019-07-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000018",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "BASIC",
+    "effective_from": "2026-02-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000018",
+    "skill_id": "SKL-SALES",
+    "proficiency": "BASIC",
+    "effective_from": "2019-07-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000018",
+    "skill_id": "SKL-TECH",
+    "proficiency": "BASIC",
+    "effective_from": "2019-07-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000019",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "BASIC",
+    "effective_from": "2019-11-13",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000019",
+    "skill_id": "SKL-SALES",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2026-03-13",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000020",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2026-04-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000020",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2023-08-30",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000020",
+    "skill_id": "SKL-TECH",
+    "proficiency": "BASIC",
+    "effective_from": "2023-08-30",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000021",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2025-03-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000021",
+    "skill_id": "SKL-TECH",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2025-03-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000022",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2019-11-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000022",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-11-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000022",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-11-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000023",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "EXPERT",
+    "effective_from": "2025-11-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000023",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2025-11-21",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000024",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2022-10-06",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000024",
+    "skill_id": "SKL-SECURITY",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2022-10-06",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000025",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "EXPERT",
+    "effective_from": "2020-01-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000025",
+    "skill_id": "SKL-SALES",
+    "proficiency": "EXPERT",
+    "effective_from": "2020-01-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000025",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2020-01-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000026",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "PROFICIENT",
+    "effective_from": "2020-11-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000026",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2020-11-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000027",
+    "skill_id": "SKL-SALES",
+    "proficiency": "EXPERT",
+    "effective_from": "2022-05-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000027",
+    "skill_id": "SKL-SECURITY",
+    "proficiency": "EXPERT",
+    "effective_from": "2022-05-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000027",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2022-05-04",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000028",
+    "skill_id": "SKL-SALES",
+    "proficiency": "EXPERT",
+    "effective_from": "2025-12-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000028",
+    "skill_id": "SKL-SECURITY",
+    "proficiency": "EXPERT",
+    "effective_from": "2025-12-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000028",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2025-12-05",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000029",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "EXPERT",
+    "effective_from": "2024-12-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000029",
+    "skill_id": "SKL-BILLING",
+    "proficiency": "EXPERT",
+    "effective_from": "2024-12-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000029",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "EXPERT",
+    "effective_from": "2024-12-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000029",
+    "skill_id": "SKL-SECURITY",
+    "proficiency": "EXPERT",
+    "effective_from": "2024-12-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000029",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2024-12-26",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000030",
+    "skill_id": "SKL-ACCOUNT",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-09-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000030",
+    "skill_id": "SKL-GENERAL",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-09-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000030",
+    "skill_id": "SKL-SECURITY",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-09-03",
+    "effective_to": null
+  },
+  {
+    "agent_id": "AGT-000030",
+    "skill_id": "SKL-TECH",
+    "proficiency": "EXPERT",
+    "effective_from": "2019-09-03",
+    "effective_to": null
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "channel_id": "CHAT",
+    "channel_name": "Live Chat",
+    "is_realtime": true,
+    "calendar_code": "CAL-CHAT",
+    "message_type": "CHAT"
+  },
+  {
+    "channel_id": "EMAIL",
+    "channel_name": "Email",
+    "is_realtime": false,
+    "calendar_code": "CAL-EMAIL",
+    "message_type": "EMAIL"
+  },
+  {
+    "channel_id": "PHONE",
+    "channel_name": "Phone Support",
+    "is_realtime": true,
+    "calendar_code": "CAL-PHONE",
+    "message_type": "VOICE_TRANSCRIPT"
+  }
+]

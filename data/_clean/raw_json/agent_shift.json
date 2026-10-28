@@ -1,0 +1,1502 @@
+[
+  {
+    "shift_id": "SHF-000001",
+    "agent_id": "AGT-000010",
+    "day_of_week": 1,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000002",
+    "agent_id": "AGT-000010",
+    "day_of_week": 2,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000003",
+    "agent_id": "AGT-000010",
+    "day_of_week": 3,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000004",
+    "agent_id": "AGT-000010",
+    "day_of_week": 4,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000005",
+    "agent_id": "AGT-000010",
+    "day_of_week": 5,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000006",
+    "agent_id": "AGT-000028",
+    "day_of_week": 1,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000007",
+    "agent_id": "AGT-000028",
+    "day_of_week": 2,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000008",
+    "agent_id": "AGT-000028",
+    "day_of_week": 3,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000009",
+    "agent_id": "AGT-000028",
+    "day_of_week": 4,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000010",
+    "agent_id": "AGT-000028",
+    "day_of_week": 5,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000011",
+    "agent_id": "AGT-000030",
+    "day_of_week": 7,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000012",
+    "agent_id": "AGT-000030",
+    "day_of_week": 1,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000013",
+    "agent_id": "AGT-000030",
+    "day_of_week": 2,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000014",
+    "agent_id": "AGT-000030",
+    "day_of_week": 3,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000015",
+    "agent_id": "AGT-000030",
+    "day_of_week": 4,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000016",
+    "agent_id": "AGT-000022",
+    "day_of_week": 7,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000017",
+    "agent_id": "AGT-000022",
+    "day_of_week": 1,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000018",
+    "agent_id": "AGT-000022",
+    "day_of_week": 2,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000019",
+    "agent_id": "AGT-000022",
+    "day_of_week": 3,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000020",
+    "agent_id": "AGT-000022",
+    "day_of_week": 4,
+    "shift_code": "NIGHT",
+    "start_time": "22:00",
+    "end_time": "06:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000021",
+    "agent_id": "AGT-000015",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000022",
+    "agent_id": "AGT-000015",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000023",
+    "agent_id": "AGT-000015",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000024",
+    "agent_id": "AGT-000015",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000025",
+    "agent_id": "AGT-000015",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000026",
+    "agent_id": "AGT-000024",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000027",
+    "agent_id": "AGT-000024",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000028",
+    "agent_id": "AGT-000024",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000029",
+    "agent_id": "AGT-000024",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000030",
+    "agent_id": "AGT-000024",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000031",
+    "agent_id": "AGT-000003",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000032",
+    "agent_id": "AGT-000003",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000033",
+    "agent_id": "AGT-000003",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000034",
+    "agent_id": "AGT-000003",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000035",
+    "agent_id": "AGT-000003",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000036",
+    "agent_id": "AGT-000017",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000037",
+    "agent_id": "AGT-000017",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000038",
+    "agent_id": "AGT-000017",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000039",
+    "agent_id": "AGT-000017",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000040",
+    "agent_id": "AGT-000017",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000041",
+    "agent_id": "AGT-000013",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000042",
+    "agent_id": "AGT-000013",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000043",
+    "agent_id": "AGT-000013",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000044",
+    "agent_id": "AGT-000013",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000045",
+    "agent_id": "AGT-000013",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000046",
+    "agent_id": "AGT-000004",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000047",
+    "agent_id": "AGT-000004",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000048",
+    "agent_id": "AGT-000004",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000049",
+    "agent_id": "AGT-000004",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000050",
+    "agent_id": "AGT-000004",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000051",
+    "agent_id": "AGT-000018",
+    "day_of_week": 7,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000052",
+    "agent_id": "AGT-000018",
+    "day_of_week": 1,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000053",
+    "agent_id": "AGT-000018",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000054",
+    "agent_id": "AGT-000018",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000055",
+    "agent_id": "AGT-000018",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000056",
+    "agent_id": "AGT-000016",
+    "day_of_week": 2,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000057",
+    "agent_id": "AGT-000016",
+    "day_of_week": 3,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000058",
+    "agent_id": "AGT-000016",
+    "day_of_week": 4,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000059",
+    "agent_id": "AGT-000016",
+    "day_of_week": 5,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000060",
+    "agent_id": "AGT-000016",
+    "day_of_week": 6,
+    "shift_code": "EARLY",
+    "start_time": "06:00",
+    "end_time": "14:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000061",
+    "agent_id": "AGT-000019",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000062",
+    "agent_id": "AGT-000019",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000063",
+    "agent_id": "AGT-000019",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000064",
+    "agent_id": "AGT-000019",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000065",
+    "agent_id": "AGT-000019",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000066",
+    "agent_id": "AGT-000002",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000067",
+    "agent_id": "AGT-000002",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000068",
+    "agent_id": "AGT-000002",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000069",
+    "agent_id": "AGT-000002",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000070",
+    "agent_id": "AGT-000002",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000071",
+    "agent_id": "AGT-000021",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000072",
+    "agent_id": "AGT-000021",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000073",
+    "agent_id": "AGT-000021",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000074",
+    "agent_id": "AGT-000021",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000075",
+    "agent_id": "AGT-000021",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000076",
+    "agent_id": "AGT-000012",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000077",
+    "agent_id": "AGT-000012",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000078",
+    "agent_id": "AGT-000012",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000079",
+    "agent_id": "AGT-000012",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000080",
+    "agent_id": "AGT-000012",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000081",
+    "agent_id": "AGT-000025",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000082",
+    "agent_id": "AGT-000025",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000083",
+    "agent_id": "AGT-000025",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000084",
+    "agent_id": "AGT-000025",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000085",
+    "agent_id": "AGT-000025",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000086",
+    "agent_id": "AGT-000027",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000087",
+    "agent_id": "AGT-000027",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000088",
+    "agent_id": "AGT-000027",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000089",
+    "agent_id": "AGT-000027",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000090",
+    "agent_id": "AGT-000027",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000091",
+    "agent_id": "AGT-000023",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000092",
+    "agent_id": "AGT-000023",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000093",
+    "agent_id": "AGT-000023",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000094",
+    "agent_id": "AGT-000023",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000095",
+    "agent_id": "AGT-000023",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000096",
+    "agent_id": "AGT-000008",
+    "day_of_week": 7,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000097",
+    "agent_id": "AGT-000008",
+    "day_of_week": 1,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000098",
+    "agent_id": "AGT-000008",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000099",
+    "agent_id": "AGT-000008",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000100",
+    "agent_id": "AGT-000008",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000101",
+    "agent_id": "AGT-000020",
+    "day_of_week": 2,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000102",
+    "agent_id": "AGT-000020",
+    "day_of_week": 3,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000103",
+    "agent_id": "AGT-000020",
+    "day_of_week": 4,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000104",
+    "agent_id": "AGT-000020",
+    "day_of_week": 5,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000105",
+    "agent_id": "AGT-000020",
+    "day_of_week": 6,
+    "shift_code": "DAY",
+    "start_time": "10:00",
+    "end_time": "18:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000106",
+    "agent_id": "AGT-000014",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000107",
+    "agent_id": "AGT-000014",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000108",
+    "agent_id": "AGT-000014",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000109",
+    "agent_id": "AGT-000014",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000110",
+    "agent_id": "AGT-000014",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000111",
+    "agent_id": "AGT-000026",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000112",
+    "agent_id": "AGT-000026",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000113",
+    "agent_id": "AGT-000026",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000114",
+    "agent_id": "AGT-000026",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000115",
+    "agent_id": "AGT-000026",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000116",
+    "agent_id": "AGT-000006",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000117",
+    "agent_id": "AGT-000006",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000118",
+    "agent_id": "AGT-000006",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000119",
+    "agent_id": "AGT-000006",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000120",
+    "agent_id": "AGT-000006",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000121",
+    "agent_id": "AGT-000011",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000122",
+    "agent_id": "AGT-000011",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000123",
+    "agent_id": "AGT-000011",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000124",
+    "agent_id": "AGT-000011",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000125",
+    "agent_id": "AGT-000011",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000126",
+    "agent_id": "AGT-000001",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000127",
+    "agent_id": "AGT-000001",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000128",
+    "agent_id": "AGT-000001",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000129",
+    "agent_id": "AGT-000001",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000130",
+    "agent_id": "AGT-000001",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000131",
+    "agent_id": "AGT-000005",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000132",
+    "agent_id": "AGT-000005",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000133",
+    "agent_id": "AGT-000005",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000134",
+    "agent_id": "AGT-000005",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000135",
+    "agent_id": "AGT-000005",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000136",
+    "agent_id": "AGT-000009",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000137",
+    "agent_id": "AGT-000009",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000138",
+    "agent_id": "AGT-000009",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000139",
+    "agent_id": "AGT-000009",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000140",
+    "agent_id": "AGT-000009",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000141",
+    "agent_id": "AGT-000029",
+    "day_of_week": 7,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000142",
+    "agent_id": "AGT-000029",
+    "day_of_week": 1,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000143",
+    "agent_id": "AGT-000029",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000144",
+    "agent_id": "AGT-000029",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000145",
+    "agent_id": "AGT-000029",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000146",
+    "agent_id": "AGT-000007",
+    "day_of_week": 2,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000147",
+    "agent_id": "AGT-000007",
+    "day_of_week": 3,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000148",
+    "agent_id": "AGT-000007",
+    "day_of_week": 4,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000149",
+    "agent_id": "AGT-000007",
+    "day_of_week": 5,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  },
+  {
+    "shift_id": "SHF-000150",
+    "agent_id": "AGT-000007",
+    "day_of_week": 6,
+    "shift_code": "LATE",
+    "start_time": "14:00",
+    "end_time": "22:00",
+    "effective_from": "2026-01-05",
+    "effective_to": null
+  }
+]

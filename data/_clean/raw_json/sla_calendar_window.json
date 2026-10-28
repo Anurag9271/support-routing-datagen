@@ -1,0 +1,170 @@
+[
+  {
+    "window_id": "CWN-001",
+    "calendar_code": "CAL-EMAIL",
+    "day_of_week": 1,
+    "open_time": "08:00",
+    "close_time": "20:00"
+  },
+  {
+    "window_id": "CWN-002",
+    "calendar_code": "CAL-EMAIL",
+    "day_of_week": 2,
+    "open_time": "08:00",
+    "close_time": "20:00"
+  },
+  {
+    "window_id": "CWN-003",
+    "calendar_code": "CAL-EMAIL",
+    "day_of_week": 3,
+    "open_time": "08:00",
+    "close_time": "20:00"
+  },
+  {
+    "window_id": "CWN-004",
+    "calendar_code": "CAL-EMAIL",
+    "day_of_week": 4,
+    "open_time": "08:00",
+    "close_time": "20:00"
+  },
+  {
+    "window_id": "CWN-005",
+    "calendar_code": "CAL-EMAIL",
+    "day_of_week": 5,
+    "open_time": "08:00",
+    "close_time": "20:00"
+  },
+  {
+    "window_id": "CWN-006",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 1,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-007",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 2,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-008",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 3,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-009",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 4,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-010",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 5,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-011",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 6,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-012",
+    "calendar_code": "CAL-CHAT",
+    "day_of_week": 7,
+    "open_time": "06:00",
+    "close_time": "22:00"
+  },
+  {
+    "window_id": "CWN-013",
+    "calendar_code": "CAL-PHONE",
+    "day_of_week": 1,
+    "open_time": "09:00",
+    "close_time": "18:00"
+  },
+  {
+    "window_id": "CWN-014",
+    "calendar_code": "CAL-PHONE",
+    "day_of_week": 2,
+    "open_time": "09:00",
+    "close_time": "18:00"
+  },
+  {
+    "window_id": "CWN-015",
+    "calendar_code": "CAL-PHONE",
+    "day_of_week": 3,
+    "open_time": "09:00",
+    "close_time": "18:00"
+  },
+  {
+    "window_id": "CWN-016",
+    "calendar_code": "CAL-PHONE",
+    "day_of_week": 4,
+    "open_time": "09:00",
+    "close_time": "18:00"
+  },
+  {
+    "window_id": "CWN-017",
+    "calendar_code": "CAL-PHONE",
+    "day_of_week": 5,
+    "open_time": "09:00",
+    "close_time": "18:00"
+  },
+  {
+    "window_id": "CWN-018",
+    "calendar_code": "CAL-247",
+    "day_of_week": 1,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-019",
+    "calendar_code": "CAL-247",
+    "day_of_week": 2,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-020",
+    "calendar_code": "CAL-247",
+    "day_of_week": 3,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-021",
+    "calendar_code": "CAL-247",
+    "day_of_week": 4,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-022",
+    "calendar_code": "CAL-247",
+    "day_of_week": 5,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-023",
+    "calendar_code": "CAL-247",
+    "day_of_week": 6,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  },
+  {
+    "window_id": "CWN-024",
+    "calendar_code": "CAL-247",
+    "day_of_week": 7,
+    "open_time": "00:00",
+    "close_time": "24:00"
+  }
+]

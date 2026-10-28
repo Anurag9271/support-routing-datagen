@@ -1,0 +1,8 @@
+queue_id,queue_name,queue_type,required_skill_id,min_tier
+QUE-ACCOUNT,Account Queue,SKILL,SKL-ACCOUNT,T1
+QUE-BILLING,Billing Queue,SKILL,SKL-BILLING,T1
+QUE-ESCALATION,Escalation Queue,ESCALATION,,T2
+QUE-GENERAL,General Queue,SKILL,SKL-GENERAL,T1
+QUE-INCIDENT,Critical Incident Queue,INCIDENT,,T2
+QUE-SALES,Sales Queue,SKILL,SKL-SALES,T1
+QUE-TECH,Technical Support Queue,SKILL,SKL-TECH,T1

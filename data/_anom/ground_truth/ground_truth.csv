@@ -1,0 +1,16 @@
+gt_id,issue_type,entity_type,entity_id,ticket_id,is_primary,detection_rule,expected_value,observed_value,description
+GT-000001,PRIORITY_CONTRADICTS_SAFETY,TICKET,TKT-2026-000043,TKT-2026-000043,true,V-SAFE-01,P1,P2,Safety intent INT-009 on ticket TKT-2026-000043 set to P2 instead of P1
+GT-000002,AGENT_OVER_CAPACITY,ASSIGNMENT_EVENT,ASN-TKT-2026-000093-001,TKT-2026-000093,true,V-ROUT-CAP-01,4,5,Agent AGT-000017 assigned ticket TKT-2026-000093 exceeding concurrency limit 4 (load_after=5)
+GT-000003,SLA_IGNORES_CALENDAR,SLA_EVENT,SLA-TKT-2026-000113,TKT-2026-000113,true,V-SLA-01,2026-01-14T12:57:27Z,2026-01-13T21:57:27Z,SLAEvent SLA-TKT-2026-000113 due times computed using wall-clock time ignoring calendar CAL-PHONE
+GT-000004,PRIORITY_CONTRADICTS_SAFETY,TICKET,TKT-2026-000224,TKT-2026-000224,true,V-SAFE-01,P1,P2,Safety intent INT-008 on ticket TKT-2026-000224 set to P2 instead of P1
+GT-000005,PRIORITY_CONTRADICTS_SAFETY,TICKET,TKT-2026-000287,TKT-2026-000287,true,V-SAFE-01,P1,P2,Safety intent INT-008 on ticket TKT-2026-000287 set to P2 instead of P1
+GT-000006,TRANSFER_LOOP,ASSIGNMENT_EVENT,ASN-TKT-2026-000376-003,TKT-2026-000376,true,V-LOOP-01,1,2,Transfer loop A->B->A->B on ticket TKT-2026-000376 assigns agent AGT-000021 twice in cycle 1
+GT-000007,TRANSFER_LOOP,ASSIGNMENT_EVENT,ASN-TKT-2026-000398-003,TKT-2026-000398,true,V-LOOP-01,1,2,Transfer loop A->B->A->B on ticket TKT-2026-000398 assigns agent AGT-000016 twice in cycle 1
+GT-000008,REOPEN_LOSES_HISTORY,TICKET,TKT-2026-000431,TKT-2026-000431,true,V-HIST-01,cycle 1 history present,cycle 1 history missing,"Reopened ticket TKT-2026-000431 cycle 1 AssignmentEvents, SLAEvent, and Resolution deleted"
+GT-000009,REOPEN_LOSES_HISTORY,TICKET,TKT-2026-000433,TKT-2026-000433,true,V-HIST-01,cycle 1 history present,cycle 1 history missing,"Reopened ticket TKT-2026-000433 cycle 1 AssignmentEvents, SLAEvent, and Resolution deleted"
+GT-000010,TRANSFER_LOOP,ASSIGNMENT_EVENT,ASN-TKT-2026-000449-003,TKT-2026-000449,true,V-LOOP-01,1,2,Transfer loop A->B->A->B on ticket TKT-2026-000449 assigns agent AGT-000026 twice in cycle 1
+GT-000011,SLA_IGNORES_CALENDAR,SLA_EVENT,SLA-TKT-2026-000512,TKT-2026-000512,true,V-SLA-01,2026-02-18T13:16:34Z,2026-02-18T05:16:34Z,SLAEvent SLA-TKT-2026-000512 due times computed using wall-clock time ignoring calendar CAL-CHAT
+GT-000012,SLA_IGNORES_CALENDAR,SLA_EVENT,SLA-TKT-2026-000589,TKT-2026-000589,true,V-SLA-01,2026-02-26T09:26:25Z,2026-02-25T21:26:25Z,SLAEvent SLA-TKT-2026-000589 due times computed using wall-clock time ignoring calendar CAL-EMAIL
+GT-000013,AGENT_OVER_CAPACITY,ASSIGNMENT_EVENT,ASN-TKT-2026-000609-001,TKT-2026-000609,true,V-ROUT-CAP-01,4,5,Agent AGT-000020 assigned ticket TKT-2026-000609 exceeding concurrency limit 4 (load_after=5)
+GT-000014,REOPEN_LOSES_HISTORY,TICKET,TKT-2026-000854,TKT-2026-000854,true,V-HIST-01,cycle 1 history present,cycle 1 history missing,"Reopened ticket TKT-2026-000854 cycle 1 AssignmentEvents, SLAEvent, and Resolution deleted"
+GT-000015,AGENT_OVER_CAPACITY,ASSIGNMENT_EVENT,ASN-TKT-2026-000930-001,TKT-2026-000930,true,V-ROUT-CAP-01,5,6,Agent AGT-000026 assigned ticket TKT-2026-000930 exceeding concurrency limit 5 (load_after=6)

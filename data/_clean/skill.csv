@@ -1,0 +1,7 @@
+skill_id,skill_name,description
+SKL-ACCOUNT,Account Management,"User profile, authentication, security settings"
+SKL-BILLING,Billing & Payments,"Invoicing, payment processing, chargebacks and refunds"
+SKL-GENERAL,General Inquiries,"General questions, company information, user feedback"
+SKL-SALES,Sales & Presales,"Product demonstrations, pricing inquiries, upgrade requests"
+SKL-SECURITY,Security & Safety,"Security incident reporting, account breach, safety hazards"
+SKL-TECH,Technical Support,"Troubleshooting, error resolution, bug reporting, outages"

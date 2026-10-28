@@ -1,0 +1,9 @@
+rule_id,rule_type,rule_name,priority_level,segment,upgrade_levels,floor_priority_level,first_response_min,resolution_min,escalation_after_min,calendar_code_override,precedence,effective_from,effective_to,description
+PRL-001,SLA_TARGET,P1 24/7 SLA Target,P1,,,,15,240,60,CAL-247,9,2026-01-05,,"P1 24x7 SLA Target (15m FRT, 4h Resolution, 1h Escalation)"
+PRL-002,SLA_TARGET,P2 Channel SLA Target (v1),P2,,,,60,480,240,,9,2026-01-05,2026-02-15,"P2 Channel SLA Target prior to 2026-02-16 (60m FRT, 8h Resolution, 4h Escalation)"
+PRL-003,SLA_TARGET,P2 Channel SLA Target (v2),P2,,,,45,480,240,,9,2026-02-16,,"P2 Channel SLA Target effective 2026-02-16 onwards (45m FRT, 8h Resolution, 4h Escalation)"
+PRL-004,SLA_TARGET,P3 Channel SLA Target,P3,,,,240,1440,720,,9,2026-01-05,,"P3 Channel SLA Target (4h FRT, 24h Resolution, 12h Escalation)"
+PRL-005,SLA_TARGET,P4 Channel SLA Target,P4,,,,480,2880,1440,,9,2026-01-05,,"P4 Channel SLA Target (8h FRT, 48h Resolution, 24h Escalation)"
+PRL-006,INCIDENT_OVERRIDE,Critical Incident Override,P1,,,,,,,,1,2026-01-05,,Critical Incident tickets are forced to P1
+PRL-007,SAFETY_OVERRIDE,Product Safety & Security Override,P1,,,,,,,,2,2026-01-05,,Safety and security related intents are forced to P1
+PRL-008,SEGMENT_UPGRADE,Enterprise Segment Priority Upgrade,,ENTERPRISE,1,P2,,,,,3,2026-01-05,,"Enterprise segment customers receive a 1-level priority upgrade, capped at P2"

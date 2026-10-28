@@ -1,0 +1,51 @@
+[
+  {
+    "queue_id": "QUE-ACCOUNT",
+    "queue_name": "Account Queue",
+    "queue_type": "SKILL",
+    "required_skill_id": "SKL-ACCOUNT",
+    "min_tier": "T1"
+  },
+  {
+    "queue_id": "QUE-BILLING",
+    "queue_name": "Billing Queue",
+    "queue_type": "SKILL",
+    "required_skill_id": "SKL-BILLING",
+    "min_tier": "T1"
+  },
+  {
+    "queue_id": "QUE-ESCALATION",
+    "queue_name": "Escalation Queue",
+    "queue_type": "ESCALATION",
+    "required_skill_id": null,
+    "min_tier": "T2"
+  },
+  {
+    "queue_id": "QUE-GENERAL",
+    "queue_name": "General Queue",
+    "queue_type": "SKILL",
+    "required_skill_id": "SKL-GENERAL",
+    "min_tier": "T1"
+  },
+  {
+    "queue_id": "QUE-INCIDENT",
+    "queue_name": "Critical Incident Queue",
+    "queue_type": "INCIDENT",
+    "required_skill_id": null,
+    "min_tier": "T2"
+  },
+  {
+    "queue_id": "QUE-SALES",
+    "queue_name": "Sales Queue",
+    "queue_type": "SKILL",
+    "required_skill_id": "SKL-SALES",
+    "min_tier": "T1"
+  },
+  {
+    "queue_id": "QUE-TECH",
+    "queue_name": "Technical Support Queue",
+    "queue_type": "SKILL",
+    "required_skill_id": "SKL-TECH",
+    "min_tier": "T1"
+  }
+]

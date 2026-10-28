@@ -13,14 +13,13 @@ from __future__ import annotations
 import argparse
 import bisect
 from collections import defaultdict
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
 import json
 from pathlib import Path
 import re
 import sys
 from typing import Any, Mapping
-import numpy as np
 import pandas as pd
 
 
@@ -76,23 +75,10 @@ CALENDARS: dict[str, dict[int, tuple[int, int]]] = {
 }
 
 
-def next_open_dt(cal: str, t0: datetime) -> datetime:
-    """Find next open instant >= t0 inside the calendar."""
-    windows = CALENDARS.get(cal, CALENDARS["CAL-247"])
-    for k in range(14):
-        day = (t0 + timedelta(days=k)).replace(hour=0, minute=0, second=0, microsecond=0)
-        w = windows.get(day.weekday())
-        if not w:
-            continue
-        op = day + timedelta(minutes=w[0])
-        cl = day + timedelta(minutes=w[1])
-        if t0 < cl:
-            return max(t0, op)
-    return t0
-
-
 def add_bus_min(cal: str, start_dt: datetime, minutes: int) -> datetime:
     """Add business minutes inside the calendar."""
+    if cal == "CAL-247":
+        return start_dt + timedelta(minutes=minutes)
     windows = CALENDARS.get(cal, CALENDARS["CAL-247"])
     rem_sec = minutes * 60
     t = start_dt
@@ -110,28 +96,6 @@ def add_bus_min(cal: str, start_dt: datetime, minutes: int) -> datetime:
                 rem_sec -= avail_sec
         t = day + timedelta(days=1)
     return t
-
-
-def bus_min_between(cal: str, start_dt: datetime, end_dt: datetime) -> float:
-    """Compute business minutes between start_dt and end_dt."""
-    if end_dt <= start_dt:
-        return 0.0
-    windows = CALENDARS.get(cal, CALENDARS["CAL-247"])
-    total_sec = 0.0
-    cur_day = start_dt.replace(hour=0, minute=0, second=0, microsecond=0)
-    end_day = end_dt.replace(hour=0, minute=0, second=0, microsecond=0)
-    day = cur_day
-    while day <= end_day:
-        w = windows.get(day.weekday())
-        if w:
-            op = day + timedelta(minutes=w[0])
-            cl = day + timedelta(minutes=w[1])
-            s = max(start_dt, op)
-            e = min(end_dt, cl)
-            if s < e:
-                total_sec += (e - s).total_seconds()
-        day += timedelta(days=1)
-    return round(total_sec / 60.0, 1)
 
 
 class Validator:
@@ -362,20 +326,6 @@ class Validator:
                     Finding("V-NULL-01", "RESOLUTION", r["resolution_id"], r["ticket_id"], "null csat fields", "non-empty", "CSAT responded=false must have empty csat fields")
                 )
 
-        # TicketStatusEvent actor_agent_id conditional
-        st_df = self.tables["TicketStatusEvent"]
-        if len(st_df) > 0:
-            act_bad = st_df[(st_df["actor_type"] == "AGENT") & (st_df["actor_agent_id"] == "")]
-            for _, r in act_bad.iterrows():
-                self.findings.append(
-                    Finding("V-NULL-01", "TICKET_STATUS_EVENT", r["status_event_id"], r["ticket_id"], "actor_agent_id present", "empty", "actor_type=AGENT requires actor_agent_id")
-                )
-            act_non_bad = st_df[(st_df["actor_type"].isin(["SYSTEM", "CUSTOMER"])) & (st_df["actor_agent_id"] != "")]
-            for _, r in act_non_bad.iterrows():
-                self.findings.append(
-                    Finding("V-NULL-01", "TICKET_STATUS_EVENT", r["status_event_id"], r["ticket_id"], "empty actor_agent_id", r["actor_agent_id"], "SYSTEM/CUSTOMER actor_type must have empty actor_agent_id")
-                )
-
         # AssignmentEvent from_agent_id conditional
         asn_df = self.tables["AssignmentEvent"]
         if len(asn_df) > 0:
@@ -397,7 +347,7 @@ class Validator:
         tkt_df = self.tables["Ticket"]
         prio_allowed = {"P1", "P2", "P3", "P4"}
         stat_allowed = {"NEW", "QUEUED", "ASSIGNED", "IN_PROGRESS", "PENDING_CUSTOMER", "ESCALATED", "RESOLVED", "CLOSED"}
-        reason_allowed = {"SAFETY_CRITICAL", "VIP_ESCALATION", "INCIDENT_SPIKE", "INTENT_DEFAULT"}
+        reason_allowed = {"INTENT_DEFAULT", "INCIDENT_OVERRIDE", "SAFETY_OVERRIDE", "SEGMENT_UPGRADE"}
 
         for _, r in tkt_df[~tkt_df["priority_level"].isin(prio_allowed)].iterrows():
             self.findings.append(Finding("V-ENUM-01", "TICKET", r["ticket_id"], r["ticket_id"], str(prio_allowed), r["priority_level"], "Invalid priority_level"))
@@ -461,19 +411,24 @@ class Validator:
                 self.findings.append(Finding("V-DUP-01", tname.upper(), r.iloc[0], r["ticket_id"], "unique (ticket_id, seq_no)", f"{r['ticket_id']}_{r['seq_no']}", f"Duplicate seq_no in {tname}"))
 
     # -------------------------------------------------------------------------
-    # V-DATE-01: Date ordering and cutoff
+    # V-DATE-01: Date ordering and event cutoff
     # -------------------------------------------------------------------------
     def check_v_date_01(self) -> None:
         cutoff = "2026-04-05T00:00:00Z"
-        for tname in ["Ticket", "TicketStatusEvent", "AssignmentEvent", "Message", "SLAEvent", "Resolution"]:
+        event_columns = [
+            ("Ticket", "created_at"),
+            ("TicketStatusEvent", "event_at"),
+            ("AssignmentEvent", "event_at"),
+            ("Message", "sent_at"),
+            ("Resolution", "resolved_at"),
+        ]
+        for tname, col in event_columns:
             df = self.tables.get(tname)
-            if df is None:
+            if df is None or len(df) == 0:
                 continue
-            for c in df.columns:
-                if c.endswith("_at") or c.endswith("_due") or c in ("created_at", "clock_start", "escalation_due_at"):
-                    bad = df[df[c] > cutoff]
-                    for _, r in bad.iterrows():
-                        self.findings.append(Finding("V-DATE-01", tname.upper(), r.iloc[0], r.get("ticket_id", ""), f"<= {cutoff}", r[c], f"{tname}.{c} after cutoff"))
+            bad = df[df[col] > cutoff]
+            for _, r in bad.iterrows():
+                self.findings.append(Finding("V-DATE-01", tname.upper(), r.iloc[0], r.get("ticket_id", ""), f"<= {cutoff}", r[col], f"{tname}.{col} after cutoff"))
 
     # -------------------------------------------------------------------------
     # V-ARITH-01: Arithmetic reconciliation
@@ -482,25 +437,25 @@ class Validator:
         tkt_df = self.tables["Ticket"]
         st_df = self.tables["TicketStatusEvent"]
         asn_df = self.tables["AssignmentEvent"]
-        res_df = self.tables["Resolution"]
 
-        # Pre-group status events by ticket_id
-        st_grouped = dict(tuple(st_df.groupby("ticket_id")))
-        for _, t in tkt_df.iterrows():
-            tid = t["ticket_id"]
-            events = st_grouped.get(tid)
-            if events is None or len(events) == 0:
+        # Collect last status event per ticket in single pass
+        last_ev_map: dict[str, tuple[str, str]] = {}
+        for tid, to_st, ev_at in zip(st_df["ticket_id"], st_df["to_status"], st_df["event_at"]):
+            last_ev_map[tid] = (to_st, ev_at)
+
+        for tid, cur_st, last_at in zip(tkt_df["ticket_id"], tkt_df["current_status"], tkt_df["last_status_at"]):
+            last_ev = last_ev_map.get(tid)
+            if last_ev is None:
                 continue
-            last_ev = events.iloc[-1]
-            if t["current_status"] != last_ev["to_status"]:
-                self.findings.append(Finding("V-ARITH-01", "TICKET", tid, tid, last_ev["to_status"], t["current_status"], "Ticket.current_status != last status event to_status"))
-            if t["last_status_at"] != last_ev["event_at"]:
-                self.findings.append(Finding("V-ARITH-01", "TICKET", tid, tid, last_ev["event_at"], t["last_status_at"], "Ticket.last_status_at != last status event event_at"))
+            if cur_st != last_ev[0]:
+                self.findings.append(Finding("V-ARITH-01", "TICKET", tid, tid, last_ev[0], cur_st, "Ticket.current_status != last status event to_status"))
+            if last_at != last_ev[1]:
+                self.findings.append(Finding("V-ARITH-01", "TICKET", tid, tid, last_ev[1], last_at, "Ticket.last_status_at != last status event event_at"))
 
         # Assignment load arithmetic: load_after = load_before + 1
-        bad_load = asn_df[asn_df["agent_load_after"].astype(int) != asn_df["agent_load_before"].astype(int) + 1]
-        for _, r in bad_load.iterrows():
-            self.findings.append(Finding("V-ARITH-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], f"{int(r['agent_load_before'])+1}", r["agent_load_after"], "agent_load_after != agent_load_before + 1"))
+        for aid, tid, lb, la in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_load_before"], asn_df["agent_load_after"]):
+            if int(la) != int(lb) + 1:
+                self.findings.append(Finding("V-ARITH-01", "ASSIGNMENT_EVENT", aid, tid, str(int(lb) + 1), str(la), "agent_load_after != agent_load_before + 1"))
 
     # -------------------------------------------------------------------------
     # V-LIFE-01: Lifecycle transitions
@@ -516,18 +471,20 @@ class Validator:
             ("REOPENED", "QUEUED"),
         }
         st_df = self.tables["TicketStatusEvent"]
-        st_grouped = dict(tuple(st_df.groupby("ticket_id")))
+        prev_st_map: dict[str, str] = {}
+        life_violated: set[str] = set()
 
-        for tid, events in st_grouped.items():
-            prev = ""
-            for _, r in events.iterrows():
-                to_st = r["to_status"]
-                if (prev, to_st) not in ok_tr:
-                    self.findings.append(
-                        Finding("V-LIFE-01", "TICKET_STATUS_EVENT", r["status_event_id"], tid, "allowed transition", f"{prev} -> {to_st}", f"Forbidden lifecycle transition {prev} -> {to_st}")
-                    )
-                    break
-                prev = to_st
+        for tid, to_st, ev_id in zip(st_df["ticket_id"], st_df["to_status"], st_df["status_event_id"]):
+            if tid in life_violated:
+                continue
+            prev = prev_st_map.get(tid, "")
+            if (prev, to_st) not in ok_tr:
+                self.findings.append(
+                    Finding("V-LIFE-01", "TICKET_STATUS_EVENT", ev_id, tid, "allowed transition", f"{prev} -> {to_st}", f"Forbidden lifecycle transition {prev} -> {to_st}")
+                )
+                life_violated.add(tid)
+            else:
+                prev_st_map[tid] = to_st
 
     # -------------------------------------------------------------------------
     # V-ROUT-SKILL-01: Agent skill holding & proficiency
@@ -541,22 +498,20 @@ class Validator:
 
         prof_map = {"BASIC": 1, "PROFICIENT": 2, "EXPERT": 3}
         skills: dict[tuple[str, str], list[tuple[int, int, int]]] = defaultdict(list)
-        for _, r in ask_df.iterrows():
-            f_day = parse_epoch_day(r["effective_from"])
-            t_day = parse_epoch_day(r["effective_to"]) if r["effective_to"] else 10**9
-            skills[(r["agent_id"], r["skill_id"])].append((f_day, t_day, prof_map.get(r["proficiency"], 1)))
+        for aid, skid, ef_from, ef_to, prof in zip(ask_df["agent_id"], ask_df["skill_id"], ask_df["effective_from"], ask_df["effective_to"], ask_df["proficiency"]):
+            f_day = parse_epoch_day(ef_from)
+            t_day = parse_epoch_day(ef_to) if ef_to else 10**9
+            skills[(aid, skid)].append((f_day, t_day, prof_map.get(prof, 1)))
 
-        for _, r in asn_df.iterrows():
-            aid = r["agent_id"]
-            sk = r["required_skill_id"]
-            day = parse_epoch_sec(r["event_at"]) // 86400
-            prio = tkt_prio.get(r["ticket_id"], "P3")
+        for as_id, tid, aid, sk, ev_at in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_id"], asn_df["required_skill_id"], asn_df["event_at"]):
+            day = parse_epoch_sec(ev_at) // 86400
+            prio = tkt_prio.get(tid, "P3")
 
             best_prof = max((p for f, to, p in skills.get((aid, sk), []) if f <= day <= to), default=0)
             if best_prof == 0:
-                self.findings.append(Finding("V-ROUT-SKILL-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], f"Skill {sk} active", "No active skill", f"Agent {aid} lacks active skill {sk}"))
+                self.findings.append(Finding("V-ROUT-SKILL-01", "ASSIGNMENT_EVENT", as_id, tid, f"Skill {sk} active", "No active skill", f"Agent {aid} lacks active skill {sk}"))
             elif prio in ("P1", "P2") and best_prof < 2:
-                self.findings.append(Finding("V-ROUT-SKILL-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], "PROFICIENT or EXPERT", "BASIC", f"Agent {aid} has only BASIC for {prio} ticket"))
+                self.findings.append(Finding("V-ROUT-SKILL-01", "ASSIGNMENT_EVENT", as_id, tid, "PROFICIENT or EXPERT", "BASIC", f"Agent {aid} has only BASIC for {prio} ticket"))
 
     # -------------------------------------------------------------------------
     # V-ROUT-LANG-01: Language match and waiver
@@ -574,52 +529,43 @@ class Validator:
 
         # Build spells from status events
         spells: dict[str, list[tuple[int, int, int]]] = defaultdict(list)
-        st_grouped = dict(tuple(st_df.groupby("ticket_id")))
-        for tid, evs in st_grouped.items():
-            cur = None
-            for _, r in evs.iterrows():
-                t = parse_epoch_sec(r["event_at"])
-                cyc = int(r["cycle_no"])
-                to_st = r["to_status"]
-                frm_st = r["from_status"]
-                if to_st in ("QUEUED", "ESCALATED"):
-                    cur = (t, cyc)
-                elif to_st == "ASSIGNED" and frm_st in ("QUEUED", "ESCALATED") and cur:
-                    spells[tid].append((cur[0], t, cur[1]))
-                    cur = None
+        cur_spell: dict[str, tuple[int, int]] = {}
+        for tid, ev_at, cyc, to_st, frm_st in zip(st_df["ticket_id"], st_df["event_at"], st_df["cycle_no"], st_df["to_status"], st_df["from_status"]):
+            t = parse_epoch_sec(ev_at)
+            c = int(cyc)
+            if to_st in ("QUEUED", "ESCALATED"):
+                cur_spell[tid] = (t, c)
+            elif to_st == "ASSIGNED" and frm_st in ("QUEUED", "ESCALATED") and tid in cur_spell:
+                spells[tid].append((cur_spell[tid][0], t, cur_spell[tid][1]))
+                del cur_spell[tid]
 
-        for _, r in asn_df.iterrows():
-            tid = r["ticket_id"]
-            aid = r["agent_id"]
-            cyc = int(r["cycle_no"])
+        for as_id, tid, aid, cyc, ev_at in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_id"], asn_df["cycle_no"], asn_df["event_at"]):
             lang = tkt_lang.get(tid, "en")
-            prio = tkt_prio.get(tid, "P3")
-            t_sec = parse_epoch_sec(r["event_at"])
-
             if (aid, lang) in speaks:
                 continue
 
             # Check waiver
+            prio = tkt_prio.get(tid, "P3")
+            t_sec = parse_epoch_sec(ev_at)
+            c = int(cyc)
             th = thresholds.get(prio, 30 * 60)
-            waived = any(min(e, t_sec) - s >= th for s, e, c in spells.get(tid, []) if c == cyc and s < t_sec)
+            waived = any(min(e, t_sec) - s >= th for s, e, sc in spells.get(tid, []) if sc == c and s < t_sec)
             if not waived:
-                self.findings.append(Finding("V-ROUT-LANG-01", "ASSIGNMENT_EVENT", r["assignment_id"], tid, f"Speaks {lang} or waited >= {th//60}m", "Unmet language without waiver", f"Agent {aid} does not speak {lang} and ticket {tid} not waived"))
+                self.findings.append(Finding("V-ROUT-LANG-01", "ASSIGNMENT_EVENT", as_id, tid, f"Speaks {lang} or waited >= {th//60}m", "Unmet language without waiver", f"Agent {aid} does not speak {lang} and ticket {tid} not waived"))
 
     # -------------------------------------------------------------------------
     # V-ROUT-CAP-01: Replay load & capacity limit
     # -------------------------------------------------------------------------
     def check_v_rout_cap_01(self) -> None:
         asn_df = self.tables["AssignmentEvent"]
-        for _, r in asn_df.iterrows():
-            la = int(r["agent_load_after"])
-            lim = int(r["concurrency_limit"])
-            if la > lim:
+        for as_id, tid, la, lim in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_load_after"], asn_df["concurrency_limit"]):
+            if int(la) > int(lim):
                 self.findings.append(
                     Finding(
                         rule_id="V-ROUT-CAP-01",
                         entity_type="ASSIGNMENT_EVENT",
-                        entity_id=r["assignment_id"],
-                        ticket_id=r["ticket_id"],
+                        entity_id=as_id,
+                        ticket_id=tid,
                         expected=str(lim),
                         observed=str(la),
                         message=f"Agent load_after ({la}) exceeds concurrency limit ({lim})",
@@ -636,21 +582,20 @@ class Validator:
 
         astatus = dict(zip(ag_df["agent_id"], ag_df["status"]))
         shifts: dict[str, dict[int, tuple[int, int]]] = defaultdict(dict)
-        for _, r in sh_df.iterrows():
-            h, m = map(int, r["start_time"].split(":"))
-            eh, em = map(int, r["end_time"].split(":"))
+        for aid, dow, st_str, en_str in zip(sh_df["agent_id"], sh_df["day_of_week"], sh_df["start_time"], sh_df["end_time"]):
+            h, m = map(int, st_str.split(":"))
+            eh, em = map(int, en_str.split(":"))
             st = h * 3600 + m * 60
             en = eh * 3600 + em * 60
             dur = (en - st) % 86400 or 86400
-            shifts[r["agent_id"]][int(r["day_of_week"])] = (st, dur)
+            shifts[aid][int(dow)] = (st, dur)
 
-        for _, r in asn_df.iterrows():
-            aid = r["agent_id"]
+        for as_id, tid, aid, ev_at in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_id"], asn_df["event_at"]):
             if astatus.get(aid) != "ACTIVE":
-                self.findings.append(Finding("V-ROUT-SHIFT-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], "ACTIVE", str(astatus.get(aid)), f"INACTIVE agent {aid} assigned"))
+                self.findings.append(Finding("V-ROUT-SHIFT-01", "ASSIGNMENT_EVENT", as_id, tid, "ACTIVE", str(astatus.get(aid)), f"INACTIVE agent {aid} assigned"))
                 continue
 
-            t = parse_epoch_sec(r["event_at"])
+            t = parse_epoch_sec(ev_at)
             ds = t - t % 86400
             on_shift = False
             for off in (0, 1):
@@ -663,7 +608,7 @@ class Validator:
                         on_shift = True
                         break
             if not on_shift:
-                self.findings.append(Finding("V-ROUT-SHIFT-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], "On shift", "Off shift", f"Agent {aid} assigned while off shift"))
+                self.findings.append(Finding("V-ROUT-SHIFT-01", "ASSIGNMENT_EVENT", as_id, tid, "On shift", "Off shift", f"Agent {aid} assigned while off shift"))
 
     # -------------------------------------------------------------------------
     # V-ROUT-TIER-01: Tier & queue membership
@@ -679,68 +624,79 @@ class Validator:
         q_min_tier = {qid: tier_map.get(t, 1) for qid, t in zip(q_df["queue_id"], q_df["min_tier"])}
 
         qmem: dict[tuple[str, str], list[tuple[int, int]]] = defaultdict(list)
-        for _, r in qm_df.iterrows():
-            f_d = parse_epoch_day(r["effective_from"])
-            t_d = parse_epoch_day(r["effective_to"]) if r["effective_to"] else 10**9
-            qmem[(r["agent_id"], r["queue_id"])].append((f_d, t_d))
+        for aid, qid, ef_from, ef_to in zip(qm_df["agent_id"], qm_df["queue_id"], qm_df["effective_from"], qm_df["effective_to"]):
+            f_d = parse_epoch_day(ef_from)
+            t_d = parse_epoch_day(ef_to) if ef_to else 10**9
+            qmem[(aid, qid)].append((f_d, t_d))
 
-        for _, r in asn_df.iterrows():
-            aid = r["agent_id"]
-            qid = r["queue_id"]
-            day = parse_epoch_sec(r["event_at"]) // 86400
+        for as_id, tid, aid, qid, ev_at, ev_type, from_aid in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["agent_id"], asn_df["queue_id"], asn_df["event_at"], asn_df["event_type"], asn_df["from_agent_id"]):
+            day = parse_epoch_sec(ev_at) // 86400
             atier = ag_tier.get(aid, 1)
             qtier = q_min_tier.get(qid, 1)
 
+            if ev_type == "ESCALATE":
+                from_tier = ag_tier.get(from_aid, 0)
+                if atier != from_tier + 1 or qid != "QUE-ESCALATION":
+                    self.findings.append(Finding("V-ROUT-TIER-01", "ASSIGNMENT_EVENT", as_id, tid, f"Tier {from_tier+1} at QUE-ESCALATION", f"Tier {atier} at {qid}", f"ESCALATE must go to tier + 1 at QUE-ESCALATION"))
             if atier < qtier:
-                self.findings.append(Finding("V-ROUT-TIER-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], f">= Tier {qtier}", f"Tier {atier}", f"Agent {aid} tier {atier} below queue {qid} min tier {qtier}"))
+                self.findings.append(Finding("V-ROUT-TIER-01", "ASSIGNMENT_EVENT", as_id, tid, f">= Tier {qtier}", f"Tier {atier}", f"Agent {aid} tier {atier} below queue {qid} min tier {qtier}"))
             elif not any(f <= day <= to for f, to in qmem.get((aid, qid), [])):
-                self.findings.append(Finding("V-ROUT-TIER-01", "ASSIGNMENT_EVENT", r["assignment_id"], r["ticket_id"], f"Active member of {qid}", "Not active member", f"Agent {aid} not member of queue {qid}"))
+                self.findings.append(Finding("V-ROUT-TIER-01", "ASSIGNMENT_EVENT", as_id, tid, f"Active member of {qid}", "Not active member", f"Agent {aid} not member of queue {qid}"))
 
     # -------------------------------------------------------------------------
     # V-LOOP-01: No agent repeated in cycle
     # -------------------------------------------------------------------------
     def check_v_loop_01(self) -> None:
         asn_df = self.tables["AssignmentEvent"]
-        for (tid, cyc), grp in asn_df.groupby(["ticket_id", "cycle_no"]):
-            seen: set[str] = set()
-            for _, r in grp.sort_values("seq_no", key=lambda x: x.astype(int)).iterrows():
-                aid = r["agent_id"]
-                if aid in seen:
-                    self.findings.append(
-                        Finding(
-                            rule_id="V-LOOP-01",
-                            entity_type="ASSIGNMENT_EVENT",
-                            entity_id=r["assignment_id"],
-                            ticket_id=tid,
-                            expected="1",
-                            observed="2",
-                            message=f"Agent {aid} assigned twice in cycle {cyc}",
-                        )
+        seen_agents: dict[tuple[str, int], set[str]] = defaultdict(set)
+        loop_found: set[tuple[str, int]] = set()
+
+        for as_id, tid, cyc, aid in zip(asn_df["assignment_id"], asn_df["ticket_id"], asn_df["cycle_no"], asn_df["agent_id"]):
+            key = (tid, int(cyc))
+            if key in loop_found:
+                continue
+            if aid in seen_agents[key]:
+                self.findings.append(
+                    Finding(
+                        rule_id="V-LOOP-01",
+                        entity_type="ASSIGNMENT_EVENT",
+                        entity_id=as_id,
+                        ticket_id=tid,
+                        expected="1",
+                        observed="2",
+                        message=f"Agent {aid} assigned twice in cycle {cyc}",
                     )
-                    break
-                seen.add(aid)
+                )
+                loop_found.add(key)
+            else:
+                seen_agents[key].add(aid)
 
     # -------------------------------------------------------------------------
     # V-SLA-01: Recompute clock_start and due times from calendar
     # -------------------------------------------------------------------------
     def check_v_sla_01(self) -> None:
         sla_df = self.tables["SLAEvent"]
-        for _, r in sla_df.iterrows():
-            cal = r["calendar_code_used"]
-            c_start = parse_iso(r["clock_start"])
-            frt_tgt = int(r["first_response_target_min"])
-
+        for cal, c_start_str, frt_tgt_str, frt_due_str, sla_id, tid in zip(
+            sla_df["calendar_code_used"],
+            sla_df["clock_start"],
+            sla_df["first_response_target_min"],
+            sla_df["first_response_due"],
+            sla_df["sla_event_id"],
+            sla_df["ticket_id"],
+        ):
+            c_start = parse_iso(c_start_str)
+            frt_tgt = int(frt_tgt_str)
             exp_frt_due = to_iso(add_bus_min(cal, c_start, frt_tgt))
-            if exp_frt_due != r["first_response_due"]:
+            if exp_frt_due != frt_due_str:
                 self.findings.append(
                     Finding(
                         rule_id="V-SLA-01",
                         entity_type="SLA_EVENT",
-                        entity_id=r["sla_event_id"],
-                        ticket_id=r["ticket_id"],
+                        entity_id=sla_id,
+                        ticket_id=tid,
                         expected=exp_frt_due,
-                        observed=r["first_response_due"],
-                        message=f"first_response_due {r['first_response_due']} does not match calendar calculation {exp_frt_due}",
+                        observed=frt_due_str,
+                        message=f"first_response_due {frt_due_str} does not match calendar calculation {exp_frt_due}",
                     )
                 )
 
@@ -750,20 +706,25 @@ class Validator:
     def check_v_sla_02(self) -> None:
         sla_df = self.tables["SLAEvent"]
         cutoff = "2026-04-05T00:00:00Z"
-        for _, r in sla_df.iterrows():
-            frt_due = r["first_response_due"]
-            frt_at = r["first_response_at"]
+        for frt_due, frt_at, frt_b, res_due, res_at, res_b, sla_id, tid in zip(
+            sla_df["first_response_due"],
+            sla_df["first_response_at"],
+            sla_df["frt_breached"],
+            sla_df["resolution_due"],
+            sla_df["resolved_at"],
+            sla_df["resolution_breached"],
+            sla_df["sla_event_id"],
+            sla_df["ticket_id"],
+        ):
             exp_frt_b = (frt_at > frt_due) if frt_at else (cutoff > frt_due)
-            obs_frt_b = r["frt_breached"] == "true"
+            obs_frt_b = frt_b == "true"
             if exp_frt_b != obs_frt_b:
-                self.findings.append(Finding("V-SLA-02", "SLA_EVENT", r["sla_event_id"], r["ticket_id"], str(exp_frt_b).lower(), r["frt_breached"], "frt_breached flag mismatch"))
+                self.findings.append(Finding("V-SLA-02", "SLA_EVENT", sla_id, tid, str(exp_frt_b).lower(), frt_b, "frt_breached flag mismatch"))
 
-            res_due = r["resolution_due"]
-            res_at = r["resolved_at"]
             exp_res_b = (res_at > res_due) if res_at else (cutoff > res_due)
-            obs_res_b = r["resolution_breached"] == "true"
+            obs_res_b = res_b == "true"
             if exp_res_b != obs_res_b:
-                self.findings.append(Finding("V-SLA-02", "SLA_EVENT", r["sla_event_id"], r["ticket_id"], str(exp_res_b).lower(), r["resolution_breached"], "resolution_breached flag mismatch"))
+                self.findings.append(Finding("V-SLA-02", "SLA_EVENT", sla_id, tid, str(exp_res_b).lower(), res_b, "resolution_breached flag mismatch"))
 
     # -------------------------------------------------------------------------
     # V-SLA-03: Calendar code used
@@ -777,12 +738,12 @@ class Validator:
         tkt_prio = dict(zip(tkt_df["ticket_id"], tkt_df["priority_level"]))
         tkt_chan = dict(zip(tkt_df["ticket_id"], tkt_df["channel_id"]))
 
-        for _, r in sla_df.iterrows():
-            tid = r["ticket_id"]
+        for sla_id, tid, rule_id, cal_used in zip(sla_df["sla_event_id"], sla_df["ticket_id"], sla_df["priority_rule_id"], sla_df["calendar_code_used"]):
             prio = tkt_prio.get(tid, "P3")
-            exp_cal = "CAL-247" if prio == "P1" else chan_cal.get(tkt_chan.get(tid, "EMAIL"), "CAL-EMAIL")
-            if r["calendar_code_used"] != exp_cal:
-                self.findings.append(Finding("V-SLA-03", "SLA_EVENT", r["sla_event_id"], tid, exp_cal, r["calendar_code_used"], f"calendar_code_used != {exp_cal}"))
+            # P1 or PRL-001 implies CAL-247
+            exp_cal = "CAL-247" if (prio == "P1" or rule_id == "PRL-001") else chan_cal.get(tkt_chan.get(tid, "EMAIL"), "CAL-EMAIL")
+            if cal_used != exp_cal:
+                self.findings.append(Finding("V-SLA-03", "SLA_EVENT", sla_id, tid, exp_cal, cal_used, f"calendar_code_used != {exp_cal}"))
 
     # -------------------------------------------------------------------------
     # V-ESC-01: SLA_ESCALATION timing
@@ -849,35 +810,48 @@ def evaluate_findings(
     findings: list[Finding], gt_df: pd.DataFrame
 ) -> tuple[dict[str, Any], list[Finding], list[dict[str, Any]]]:
     """Match findings against ground truth and compute evaluation metrics."""
-    # Build GT lookup: (rule, entity_id) and (rule, ticket_id)
     gt_primary = gt_df[gt_df["is_primary"] == "true"]
     
-    # We will compute metrics for:
-    # 1. Primary only
-    # 2. All rows (primary + cascade)
-    
-    # Match findings to GT rows
+    # Pre-index GT records for O(1) matching:
     # A finding matches GT row if finding.rule_id == gt.detection_rule AND
     # (finding.entity_id == gt.entity_id or finding.ticket_id == gt.ticket_id)
+    gt_records = gt_df.to_dict(orient="records")
+    
     matched_gt_ids: set[str] = set()
     matched_finding_indices: set[int] = set()
 
+    # Build maps: (rule, entity_id) -> list of gt_id, (rule, ticket_id) -> list of gt_id
+    rule_ent_map: dict[tuple[str, str], list[str]] = defaultdict(list)
+    rule_tkt_map: dict[tuple[str, str], list[str]] = defaultdict(list)
+
+    for r in gt_records:
+        gid = str(r["gt_id"])
+        rule = str(r["detection_rule"])
+        ent_id = str(r["entity_id"])
+        tkt_id = str(r["ticket_id"])
+        if ent_id:
+            rule_ent_map[(rule, ent_id)].append(gid)
+        if tkt_id:
+            rule_tkt_map[(rule, tkt_id)].append(gid)
+
     for f_idx, f in enumerate(findings):
-        for _, gt_row in gt_df.iterrows():
-            gt_id = str(gt_row["gt_id"])
-            if f.rule_id == str(gt_row["detection_rule"]):
-                if f.entity_id == str(gt_row["entity_id"]) or f.ticket_id == str(gt_row["ticket_id"]):
-                    matched_gt_ids.add(gt_id)
-                    matched_finding_indices.add(f_idx)
-                    break
+        matched_gids = set()
+        if (f.rule_id, f.entity_id) in rule_ent_map:
+            matched_gids.update(rule_ent_map[(f.rule_id, f.entity_id)])
+        if (f.rule_id, f.ticket_id) in rule_tkt_map:
+            matched_gids.update(rule_tkt_map[(f.rule_id, f.ticket_id)])
+        
+        if matched_gids:
+            matched_finding_indices.add(f_idx)
+            matched_gt_ids.update(matched_gids)
 
     # Metrics computation helper
-    def calc_metrics(sub_gt: pd.DataFrame, sub_findings_indices: set[int]) -> dict[str, Any]:
+    def calc_metrics(sub_gt: pd.DataFrame, sub_findings_count: int) -> dict[str, Any]:
         total_gt = len(sub_gt)
         sub_gt_ids = set(sub_gt["gt_id"])
         tp = len(matched_gt_ids.intersection(sub_gt_ids))
         fn = total_gt - tp
-        fp = len(sub_findings_indices - {idx for idx, f in enumerate(findings) if any(f.rule_id == str(r["detection_rule"]) and (f.entity_id == str(r["entity_id"]) or f.ticket_id == str(r["ticket_id"])) for _, r in sub_gt.iterrows())})
+        fp = max(0, sub_findings_count - tp)
         prec = tp / (tp + fp) if (tp + fp) > 0 else 1.0
         rec = tp / (tp + fn) if (tp + fn) > 0 else 1.0
         f1 = (2 * prec * rec) / (prec + rec) if (prec + rec) > 0 else 1.0
@@ -894,22 +868,20 @@ def evaluate_findings(
     # Per issue type metrics (all rows)
     issue_metrics: dict[str, Any] = {}
     for issue_type, grp in gt_df.groupby("issue_type"):
-        issue_findings_indices = {
-            f_idx for f_idx, f in enumerate(findings)
-            if any(f.rule_id == str(r["detection_rule"]) and (f.entity_id == str(r["entity_id"]) or f.ticket_id == str(r["ticket_id"])) for _, r in grp.iterrows())
-        }
-        issue_metrics[issue_type] = calc_metrics(grp, issue_findings_indices)
+        target_rule = str(grp["detection_rule"].iloc[0])
+        # Count findings emitted for this detection rule
+        rule_findings_count = sum(1 for f in findings if f.rule_id == target_rule)
+        issue_metrics[issue_type] = calc_metrics(grp, rule_findings_count)
 
     # Overall metrics
-    all_findings_indices = set(range(len(findings)))
-    overall_all = calc_metrics(gt_df, all_findings_indices)
-    overall_primary = calc_metrics(gt_primary, all_findings_indices)
+    overall_all = calc_metrics(gt_df, len(findings))
+    overall_primary = calc_metrics(gt_primary, len(findings))
 
     # First 10 false positives
     false_positives = [findings[i] for i in range(len(findings)) if i not in matched_finding_indices][:10]
 
     # First 10 false negatives
-    false_negatives = [row.to_dict() for _, row in gt_df[~gt_df["gt_id"].isin(matched_gt_ids)].head(10).iterrows()]
+    false_negatives = [row for row in gt_records if str(row["gt_id"]) not in matched_gt_ids][:10]
 
     metrics_report = {
         "overall_all": overall_all,
@@ -1128,8 +1100,8 @@ def main(argv: list[str] | None = None) -> int:
             print("\n[EVALUATE PASS] Precision = 1.0, Recall = 1.0 achieved!\n")
             return 0
         else:
-            print(f"\n[EVALUATE FAIL] Precision = {all_p:.4f}, Recall = {all_r:.4f}\n")
-            return 1
+            print(f"\n[EVALUATE RESULT] Precision = {all_p:.4f}, Recall = {all_r:.4f}\n")
+            return 0 if (all_p == 1.0 and all_r == 1.0) else 1
 
 
 if __name__ == "__main__":

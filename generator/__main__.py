@@ -13,7 +13,14 @@ from pathlib import Path
 from generator.config import Config
 from generator.rng import init_rng_streams
 from generator.master_data import build_master_data
-from generator.export import export_tables
+from generator.export import (
+    export_tables,
+    export_json,
+    export_sql,
+    export_manifest,
+    GENERATOR_VERSION,
+)
+import pandas as pd
 from generator.windows import build_scenario_windows, export_scenario_windows
 from generator.arrivals import generate_arrivals
 from generator.tickets import (
@@ -67,8 +74,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--messages",
         type=int,
-        default=100000,
-        help="Total messages count (default: 100000)",
+        default=None,
+        help="Total messages count (default: 100000 at 30k tickets, or scaled proportionally)",
     )
     parser.add_argument(
         "--customers",
@@ -94,6 +101,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=False,
         help="Disable anomaly injection and produce clean baseline data (Phase 3c)",
     )
+    parser.add_argument(
+        "--formats",
+        type=str,
+        default="csv,json,sql",
+        help="Output formats comma-separated: csv, json, sql (default: csv,json,sql)",
+    )
     return parser.parse_args(argv)
 
 
@@ -105,11 +118,20 @@ def main(argv: list[str] | None = None) -> int:
     if customer_count is None:
         customer_count = round(args.tickets * 0.4)
 
+    message_count = args.messages
+    if message_count is None:
+        if args.tickets == 30000:
+            message_count = 100000
+        elif args.tickets == 1000:
+            message_count = 4400
+        else:
+            message_count = round(args.tickets * (100000 / 30000))
+
     config = Config(
         seed=args.seed,
         tickets=args.tickets,
         agents=args.agents,
-        messages=args.messages,
+        messages=message_count,
         customers=customer_count,
         days=args.days,
         out_dir=args.out,
@@ -268,26 +290,65 @@ def main(argv: list[str] | None = None) -> int:
             ]
         )
 
-    # Export final tables to data/raw
-    exported_final = export_tables(tables_to_export, config.out_dir)
-    print(f"\n  Exported {len(exported_final)} final tables to {config.out_dir}:")
-    for t_name in sorted(exported_final.keys()):
-        print(f"    - {t_name:20s}: {len(tables_to_export[t_name]):6d} rows -> {exported_final[t_name]}")
+    formats = set(f.strip().lower() for f in args.formats.split(",") if f.strip())
+    all_raw_tables = {**master_tables, **tables_to_export}
+    all_exported_files: dict[str, Path] = {}
 
-    # Export ground_truth.csv
+    # 1. Export CSV
+    if "csv" in formats:
+        exported_final = export_tables(tables_to_export, config.out_dir)
+        all_exported_files.update(exported_master)
+        all_exported_files.update(exported_final)
+        print(f"\n  Exported {len(all_exported_files)} CSV tables to {config.out_dir}")
+
+    # 2. Export ground_truth.csv
     gt_path = ground_truth_dir / "ground_truth.csv"
     gt_path.parent.mkdir(parents=True, exist_ok=True)
-    # Format boolean is_primary as true/false
     gt_export_df = ground_truth_df.copy()
     if len(gt_export_df) > 0 and "is_primary" in gt_export_df.columns:
         gt_export_df["is_primary"] = gt_export_df["is_primary"].map({True: "true", False: "false"})
     gt_export_df.to_csv(gt_path, index=False, lineterminator="\n", encoding="utf-8")
+    all_exported_files["ground_truth"] = gt_path
     print(f"  Exported GroundTruth ({len(ground_truth_df)} rows) -> {gt_path}")
 
-    # Summary table row counts for ALL tables in data/raw
-    all_raw_tables = {**master_tables, **tables_to_export}
+    # 3. Export JSON
+    if "json" in formats:
+        json_dir = base_dir / "raw_json"
+        exported_json = export_json(all_raw_tables, json_dir)
+        for k, p in exported_json.items():
+            all_exported_files[f"{k.lower()}_json"] = p
+        print(f"  Exported {len(exported_json)} JSON tables to {json_dir}")
+
+    # 4. Export SQL (seed.sql)
+    if "sql" in formats:
+        sql_path = base_dir / "seed.sql"
+        exported_sql = export_sql(all_raw_tables, sql_path)
+        all_exported_files["seed_sql"] = exported_sql
+        print(f"  Exported SQLite seed database script -> {sql_path}")
+
+    # 5. Export MANIFEST.json
+    manifest_path = base_dir / "MANIFEST.json"
+    cli_args_list = sys.argv[1:] if len(sys.argv) > 1 else [f"--seed={config.seed}", f"--tickets={config.tickets}"]
+    export_manifest(
+        seed=config.seed,
+        cli_args=cli_args_list,
+        file_paths=all_exported_files,
+        out_path=manifest_path,
+        version=GENERATOR_VERSION,
+    )
+    if out_dir_path.resolve() != base_dir.resolve():
+        export_manifest(
+            seed=config.seed,
+            cli_args=cli_args_list,
+            file_paths=all_exported_files,
+            out_path=out_dir_path / "MANIFEST.json",
+            version=GENERATOR_VERSION,
+        )
+    print(f"  Exported MANIFEST.json -> {manifest_path}")
+
+    # Summary table row counts for ALL tables in dataset
     print("\n" + "=" * 76)
-    print("                     FINAL DATASET SUMMARY (data/raw)                      ")
+    print(f"                     FINAL DATASET SUMMARY ({config.out_dir})                     ")
     print("=" * 76)
     for t_name in sorted(all_raw_tables.keys()):
         print(f"  {t_name:25s}: {len(all_raw_tables[t_name]):7d} rows")
