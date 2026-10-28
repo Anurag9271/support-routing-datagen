@@ -6,7 +6,7 @@ import pandas as pd
 raw = Path(sys.argv[1] if len(sys.argv) > 1 else "data/raw")
 stg = Path(sys.argv[2] if len(sys.argv) > 2 else "data/staging")
 gt = Path(sys.argv[3] if len(sys.argv) > 3 else "data/ground_truth")
-rd = lambda p: pd.read_csv(p, keep_default_na=False)
+rd = lambda p: pd.read_csv(p, keep_default_na=False, dtype=str)
 T, D, SW = rd(stg / "ticket_draft.csv"), rd(gt / "ground_truth_decisions.csv"), rd(gt / "scenario_windows.csv")
 C, I = rd(raw / "customer.csv"), rd(raw / "intent.csv")
 for c in ("created_at",):
@@ -38,6 +38,7 @@ saf = M[M.is_safety_related == "true"]
 check("all safety intents are P1/SAFETY_OVERRIDE (or INCIDENT_OVERRIDE)",
       (saf.priority_level == "P1").all() and saf.priority_reason_code.isin(["SAFETY_OVERRIDE", "INCIDENT_OVERRIDE"]).all())
 inc = M[M.incident_id != ""]
+check("sanity: safety, incident and prospect subsets are non-empty", len(saf) > 0 and len(inc) > 0 and len(pro) > 0)
 check("incident tickets: INT-005, P1, CUSTOMER type, flagged",
       (inc.intent_id == "INT-005").all() and (inc.priority_level == "P1").all()
       and (inc.customer_type == "CUSTOMER").all() and (inc.is_critical_incident == "true").all())
@@ -95,8 +96,7 @@ def first_open(cal, t):
     return add_bm(cal, t, 0) if is_open(cal, t) else None
 
 ah = M.apply(lambda r: not is_open(CH[r.channel_id], r.created_at.to_pydatetime()), axis=1)
-check("is_after_hours_arrival matches my calendars", (ah == (M.is_critical_incident.eq("true") & False) | (ah == (M.is_after_hours_arrival == "true"))).all()
-      if False else (ah == (M.is_after_hours_arrival == "true")).all())
+check("is_after_hours_arrival matches my calendars", (ah == (M.is_after_hours_arrival == "true")).all())
 show("after-hours share overall (expect 12-25%)", round(ah.mean(), 3))
 show("after-hours share by channel", ah.groupby(M.channel_id).mean().round(3))
 
@@ -146,7 +146,7 @@ show("intent share % (actual vs rough expected; spike skew shifts BILLING/TECH s
 tpc = T.customer_id.value_counts()
 show("tickets per customer (mean ~2.5, heavy tail)", tpc.describe().round(2))
 show("customers with 0 tickets (share)", round(1 - len(tpc) / len(C), 3))
-show("dow share (Mon=0)", M.created_at.dt.dayofweek.value_counts(normalize=True).sort_index().round(3))
+show("dow share (Mon=0)", M.created_at.dt.day_of_week.value_counts(normalize=True).sort_index().round(3))
 show("hour-of-day share (UTC)", M.created_at.dt.hour.value_counts(normalize=True).sort_index().round(3).to_dict())
 
 # ---------- scenario windows ----------
@@ -164,7 +164,7 @@ for w in SW.itertuples():
         day = w.start.normalize()
         others = []
         for dd in pd.date_range("2026-01-05", "2026-04-04", tz="UTC"):
-            if dd.dayofweek < 5 and dd != day:
+            if dd.day_of_week < 5 and dd != day:
                 a, b = dd + (w.start - day), dd + (w.end - day)
                 others.append(((base.created_at >= a) & (base.created_at < b)).sum())
         avg = sum(others) / len(others)
