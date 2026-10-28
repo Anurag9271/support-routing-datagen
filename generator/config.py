@@ -29,6 +29,8 @@ class Config:
     cutoff: str = "2026-04-05T00:00:00Z"
     timezone: str = "UTC"
     days: int = 90
+    phase3b_enabled: bool = True
+    anomalies_enabled: bool = True
 
     # Scale parameters
     tickets: int = 30000

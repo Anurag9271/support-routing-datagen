@@ -1,0 +1,320 @@
+{
+  "review_status": "machine_drafted",
+  "bodies": {
+    "INT-001": {
+      "CUSTOMER": {
+        "en": "Hello, I have a question regarding the recent charges on my invoice. Could you please clarify the breakdown?",
+        "es": "Hola, tengo una pregunta sobre los cargos recientes en mi factura. ¿Podrían aclarar el desglose?",
+        "hi": "नमस्ते, मेरे चालान पर हाल के शुल्कों के संबंध में मेरा एक प्रश्न है। क्या आप विवरण स्पष्ट कर सकते हैं?",
+        "fr": "Bonjour, j ai une question concernant les frais recents sur ma facture. Pourriez-vous clarifier le detail?",
+        "ar": "مرحبا، لدي استفسار بخصوص الرسوم الأخيرة في فاتورتي. هل يمكنكم توضيح التفاصيل؟"
+      },
+      "AGENT": {
+        "en": "Thank you for contacting support. I have checked your account and verified the billing statement. The charges reflect your plan fee.",
+        "es": "Gracias por contactar con soporte. He revisado su cuenta y verificado el estado de facturacion. Los cargos reflejan su tarifa de plan.",
+        "hi": "सहायता से संपर्क करने के लिए धन्यवाद। मैंने आपके खाते की जांच की है और बिलिंग विवरण सत्यापित किया है। शुल्क आपके प्लान का हिस्सा हैं।",
+        "fr": "Merci d avoir contacte le support. J ai verifie votre compte et valide l etat de facturation. Les frais correspondent a votre forfait.",
+        "ar": "شكرا لتواصلك مع الدعم. لقد راجعت حسابك وتحققت من كشف الحساب. الرسوم تعكس رسوم خطتك."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Billing inquiry ticket updated by system.",
+        "es": "NOTA DEL SISTEMA: Ticket de consulta de facturacion actualizado por el sistema.",
+        "hi": "सिस्टम नोट: बिलिंग पूछताछ टिकट सिस्टम द्वारा अपडेट किया गया।",
+        "fr": "NOTE SYSTEME: Ticket de facturation mis a jour par le systeme.",
+        "ar": "ملاحظة النظام: تم تحديث تذكرة استفسار الفواتير بواسطة النظام."
+      }
+    },
+    "INT-002": {
+      "CUSTOMER": {
+        "en": "Hi, I would like to request a refund for my recent transaction as the service was not as expected.",
+        "es": "Hola, deseo solicitar un reembolso por mi transaccion reciente ya que el servicio no cumplio mis expectativas.",
+        "hi": "नमस्ते, मैं अपने हालिया लेनदेन के लिए रिफंड का अनुरोध करना चाहता हूं क्योंकि सेवा उम्मीद के मुताबिक नहीं थी।",
+        "fr": "Bonjour, je souhaite demander un remboursement pour ma transaction recente car le service n etait pas satisfaisant.",
+        "ar": "مرحبا، أود طلب استرداد المبلغ للمعاملة الأخيرة حيث لم تكن الخدمة كما هو متوقع."
+      },
+      "AGENT": {
+        "en": "I understand your concern and have submitted your refund request for processing in accordance with our refund policy.",
+        "es": "Entiendo su situacion y he tramitado su solicitud de reembolso de acuerdo con nuestra politica de devolucion.",
+        "hi": "मैं आपकी चिंता समझता हूँ और मैंने हमारी रिफंड नीति के अनुसार आपकी रिफंड प्रक्रिया शुरू कर दी है।",
+        "fr": "Je comprends votre situation et j ai transmis votre demande de remboursement selon notre politique de retour.",
+        "ar": "أتفهم قلقك وقد قمت بتقديم طلب استرداد الأموال وفقا لسياسة الاسترداد الخاصة بنا."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Refund request logged in payments system.",
+        "es": "NOTA DEL SISTEMA: Solicitud de reembolso registrada en el sistema de pagos.",
+        "hi": "सिस्टम नोट: भुगतान प्रणाली में रिफंड अनुरोध दर्ज किया गया।",
+        "fr": "NOTE SYSTEME: Demande de remboursement enregistree dans le systeme de paiement.",
+        "ar": "ملاحظة النظام: تم تسجيل طلب استرداد المبلغ في نظام المدفوعات."
+      }
+    },
+    "INT-003": {
+      "CUSTOMER": {
+        "en": "My payment transaction failed during checkout, but funds appear to be debited from my account.",
+        "es": "Mi transaccion de pago fallo durante el proceso, pero el importe parece haber sido debitado de mi cuenta.",
+        "hi": "चेकआउट के दौरान मेरा भुगतान लेनदेन विफल रहा, लेकिन मेरे खाते से पैसे कट गए प्रतीत होते हैं।",
+        "fr": "Mon paiement a echoue lors de la validation, mais les fonds semblent avoir ete debites.",
+        "ar": "فشلت عملية الدفع أثناء الدفع، ولكن يبدو أنه تم خصم الأموال من حسابي."
+      },
+      "AGENT": {
+        "en": "I have investigated the payment gateway log. The failed attempt will automatically reverse within 3-5 business days.",
+        "es": "He verificado el registro de la pasarela de pago. El intento fallido se revertira automaticamente en 3 a 5 dias habiles.",
+        "hi": "मैंने भुगतान गेटवे लॉग की जाँच की है। विफल प्रयास 3-5 कार्य दिवसों के भीतर स्वतः वापस आ जाएगा।",
+        "fr": "J ai verifie le journal de la passerelle de paiement. La transaction echouee sera automatiquement recréditee sous 3 a 5 jours.",
+        "ar": "لقد تحققت من سجل بوابة الدفع. ستتم إعادة العملية الفاشلة تلقائيا في غضون 3 إلى 5 أيام عمل."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Payment failure reconciled with payment gateway.",
+        "es": "NOTA DEL SISTEMA: Fallo de pago conciliado con la pasarela de pagos.",
+        "hi": "सिस्टम नोट: पेमेंट गेटवे के साथ भुगतान विफलता का मिलान किया गया।",
+        "fr": "NOTE SYSTEME: Echec de paiement concilie avec la passerelle.",
+        "ar": "ملاحظة النظام: تمت تسوية فشل الدفع مع بوابة الدفع."
+      }
+    },
+    "INT-004": {
+      "CUSTOMER": {
+        "en": "I am encountering an error message when trying to access the dashboard. Please assist.",
+        "es": "Estoy recibiendo un mensaje de error al intentar acceder al panel principal. Por favor ayudenme.",
+        "hi": "डैशबोर्ड तक पहुंचने का प्रयास करते समय मुझे एक त्रुटि संदेश मिल रहा है। कृपया सहायता करें।",
+        "fr": "Je rencontre un message d erreur lors de l acces au tableau de bord. Merci de m aider.",
+        "ar": "أواجه رسالة خطأ عند محاولة الدخول إلى لوحة التحكم. يرجى المساعدة."
+      },
+      "AGENT": {
+        "en": "We have identified the configuration causing the error and applied a fix. Please refresh your browser and try again.",
+        "es": "Hemos identificado la configuracion que causaba el error y aplicado una solucion. Por favor actualice su navegador e intente de nuevo.",
+        "hi": "हमने त्रुटि उत्पन्न करने वाले कॉन्फ़िगरेशन की पहचान कर ली है और समाधान लागू किया है। कृपया पुनः प्रयास करें।",
+        "fr": "Nous avons identifie le probleme et applique un correctif. Veuillez actualiser votre page et reessayer.",
+        "ar": "لقد حددنا الإعداد المسبب للخطأ وقمنا بتطبيق الإصلاح. يرجى تحديث المتصفح والمحاولة مرة أخرى."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Technical diagnosis completed.",
+        "es": "NOTA DEL SISTEMA: Diagnostico tecnico completado.",
+        "hi": "सिस्टम नोट: तकनीकी निदान पूरा हुआ।",
+        "fr": "NOTE SYSTEME: Diagnostic technique termine.",
+        "ar": "ملاحظة النظام: اكتمل التشخيص الفني."
+      }
+    },
+    "INT-005": {
+      "CUSTOMER": {
+        "en": "Our team is unable to connect to the platform. Is there an active service outage?",
+        "es": "Nuestro equipo no puede conectarse a la plataforma. ¿Hay una interrupcion activa del servicio?",
+        "hi": "हमारी टीम प्लेटफ़ॉर्म से कनेक्ट नहीं हो पा रही है। क्या कोई सक्रिय सेवा रुकावट है?",
+        "fr": "Notre equipe ne parvient pas a se connecter. Y a-t-il une panne de service en cours?",
+        "ar": "فريقنا غير قادر على الاتصال بالمنصة. هل هناك انقطاع نشط في الخدمة؟"
+      },
+      "AGENT": {
+        "en": "Our engineering team is actively investigating the network disruption and working to restore full connectivity.",
+        "es": "Nuestro equipo de ingenieria esta investigando la interrupcion de red y trabajando para restaurar el servicio.",
+        "hi": "हमारी इंजीनियरिंग टीम नेटवर्क व्यवधान की सक्रिय जांच कर रही है और सेवा बहाल करने पर काम कर रही है।",
+        "fr": "Notre equipe d ingenierie analyse l incident reseau et s efforce de retablir les services rapidement.",
+        "ar": "يعمل فريقنا الهندسي بنشاط على التحقيق في انقطاع الشبكة واستعادة الخدمة بالكامل."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Incident status broadcast to monitoring channels.",
+        "es": "NOTA DEL SISTEMA: Estado del incidente transmitido a los canales de monitorizacion.",
+        "hi": "सिस्टम नोट: निगरानी चैनलों पर घटना की स्थिति प्रसारित की गई।",
+        "fr": "NOTE SYSTEME: Statut de l incident diffuse aux canaux de surveillance.",
+        "ar": "ملاحظة النظام: تم بث حالة الحادث إلى قنوات المراقبة."
+      }
+    },
+    "INT-006": {
+      "CUSTOMER": {
+        "en": "I am locked out of my account and password reset emails are not arriving in my inbox.",
+        "es": "Mi cuenta esta bloqueada y los correos para restablecer contrasena no llegan a mi bandeja de entrada.",
+        "hi": "मेरा खाता लॉक हो गया है और पासवर्ड रीसेट ईमेल मेरे इनबॉक्स में नहीं आ रहे हैं।",
+        "fr": "Mon compte est verrouille et les e-mails de reinitialisation ne parviennent pas a ma boite de reception.",
+        "ar": "تم قفل حسابي ولا تصل رسائل البريد الإلكتروني الخاصة بإعادة تعيين كلمة المرور إلى صندوق الوارد."
+      },
+      "AGENT": {
+        "en": "I have unlocked your account credentials and dispatched a secure password reset link to your verified email address.",
+        "es": "He desbloqueado su cuenta y enviado un enlace seguro de recuperacion de contrasena a su correo electronico.",
+        "hi": "मैंने आपके खाते को अनलॉक कर दिया है और आपके ईमेल पते पर एक सुरक्षित पासवर्ड रीसेट लिंक भेजा है।",
+        "fr": "J ai deverrouille votre compte et envoye un lien de reinitialisation securise a votre adresse e-mail.",
+        "ar": "لقد قمت بإلغاء قفل حسابك وأرسلت رابطا آمنا لإعادة تعيين كلمة المرور إلى عنوان بريدك الإلكتروني."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Account unlock verification token dispatched.",
+        "es": "NOTA DEL SISTEMA: Token de desbloqueo de cuenta enviado.",
+        "hi": "सिस्टम नोट: खाता अनलॉक सत्यापन टोकन भेजा गया।",
+        "fr": "NOTE SYSTEME: Jeton de deverrouillage du compte envoye.",
+        "ar": "ملاحظة النظام: تم إرسال رمز التحقق من فتح الحساب."
+      }
+    },
+    "INT-007": {
+      "CUSTOMER": {
+        "en": "Please update the primary contact email and billing address associated with our company account.",
+        "es": "Por favor actualicen el correo de contacto principal y la direccion de facturacion de nuestra empresa.",
+        "hi": "कृपया हमारी कंपनी के खाते से जुड़े प्राथमिक संपर्क ईमेल और बिलिंग पते को अपडेट करें।",
+        "fr": "Merci de mettre a jour l adresse e-mail principale et l adresse de facturation de notre compte.",
+        "ar": "يرجى تحديث البريد الإلكتروني الرئيسي لجهة الاتصال وعنوان الفواتير المرتبط بحساب شركتنا."
+      },
+      "AGENT": {
+        "en": "Your account profile details have been successfully updated in our database as requested.",
+        "es": "Los datos de su perfil de cuenta han sido actualizados con exito en nuestra base de datos.",
+        "hi": "अनुरोध के अनुसार आपके खाता प्रोफ़ाइल विवरण को हमारे डेटाबेस में सफलतापूर्वक अपडेट कर दिया गया है।",
+        "fr": "Les coordonnees de votre profil ont ete mises a jour avec succes dans notre base de donnees.",
+        "ar": "تم تحديث بيانات ملفك الشخصي بنجاح في قاعدة بياناتنا كما طلبت."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Customer master record updated.",
+        "es": "NOTA DEL SISTEMA: Registro maestro de cliente actualizado.",
+        "hi": "सिस्टम नोट: ग्राहक मास्टर रिकॉर्ड अपडेट किया गया।",
+        "fr": "NOTE SYSTEME: Fiche client mise a jour.",
+        "ar": "ملاحظة النظام: تم تحديث السجل الرئيسي للعميل."
+      }
+    },
+    "INT-008": {
+      "CUSTOMER": {
+        "en": "URGENT: We detected unauthorized login attempts originating from unknown locations on our account.",
+        "es": "URGENTE: Detectamos intentos de acceso no autorizados desde ubicaciones desconocidas en nuestra cuenta.",
+        "hi": "अति आवश्यक: हमने अपने खाते पर अज्ञात स्थानों से अनधिकृत लॉगिन प्रयासों का पता लगाया है।",
+        "fr": "URGENT: Nous avons detecte des tentatives de connexion suspectes depuis des emplacements inconnus.",
+        "ar": "عاجل: رصدنا محاولات تسجيل دخول غير مصرح بها من مواقع غير معروفة في حسابنا."
+      },
+      "AGENT": {
+        "en": "We have terminated all active user sessions immediately and enforced mandatory two-factor authentication for protection.",
+        "es": "Hemos cerrado de inmediato todas las sesiones activas y activado la autenticacion obligatoria de dos factores.",
+        "hi": "हमने तुरंत सभी सक्रिय सत्र समाप्त कर दिए हैं और सुरक्षा के लिए अनिवार्य 2-कारक प्रमाणीकरण लागू किया है।",
+        "fr": "Nous avons suspendu immediatement toutes les sessions actives et applique une authentification a deux facteurs.",
+        "ar": "لقد أنهينا جميع الجلسات النشطة على الفور وفرضنا المصادقة الثنائية الإلزامية للحماية."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Security incident protocol initiated and sessions revoked.",
+        "es": "NOTA DEL SISTEMA: Protocolo de seguridad iniciado y sesiones revocadas.",
+        "hi": "सिस्टम नोट: सुरक्षा प्रोटोकॉल शुरू किया गया और सत्र रद्द किए गए।",
+        "fr": "NOTE SYSTEME: Protocole de securite lance et sessions revoquees.",
+        "ar": "ملاحظة النظام: بدأ بروتوكول الحوادث الأمنية وإلغاء الجلسات."
+      }
+    },
+    "INT-009": {
+      "CUSTOMER": {
+        "en": "URGENT: Suspicious transaction activity detected on our card that was not authorized by our staff.",
+        "es": "URGENTE: Actividad sospechosa de transacciones detectada en nuestra tarjeta no autorizada por el personal.",
+        "hi": "अति आवश्यक: हमारे कार्ड पर संदिग्ध लेनदेन गतिविधि देखी गई है जो हमारे द्वारा अधिकृत नहीं थी।",
+        "fr": "URGENT: Activite de transaction suspecte detectee sur notre carte sans notre consentement.",
+        "ar": "عاجل: تم اكتشاف نشاط معاملات مشبوه على بطاقتنا لم يأذن به موظفونا."
+      },
+      "AGENT": {
+        "en": "The payment method has been immediately blocked against further charges and referred to our fraud prevention team.",
+        "es": "El metodo de pago ha sido bloqueado de inmediato para evitar cargos adicionales y derivado a prevencion de fraude.",
+        "hi": "आगे के शुल्कों को रोकने के लिए भुगतान विधि को तुरंत ब्लॉक कर दिया गया है और धोखाधड़ी निवारण टीम को भेजा गया है।",
+        "fr": "Le moyen de paiement a ete immediatement bloque et transfere a notre equipe de prevention des fraudes.",
+        "ar": "تم حظر وسيلة الدفع على الفور لمنع المزيد من الرسوم وتمت إحالتها إلى فريق مكافحة الاحتيال."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Fraud alert triggered and payment instrument frozen.",
+        "es": "NOTA DEL SISTEMA: Alerta de fraude activada e instrumento de pago congelado.",
+        "hi": "सिस्टम नोट: धोखाधड़ी चेतावनी सक्रिय की गई और भुगतान साधन फ्रीज किया गया।",
+        "fr": "NOTE SYSTEME: Alerte a la fraude declenchee et instrument gele.",
+        "ar": "ملاحظة النظام: تم تفعيل تنبيه الاحتيال وتجميد أداة الدفع."
+      }
+    },
+    "INT-010": {
+      "CUSTOMER": {
+        "en": "We would like to explore upgrading our current subscription tier to access enterprise volume features.",
+        "es": "Deseamos explorar la mejora de nuestro plan actual para acceder a funciones para empresas.",
+        "hi": "हम एंटरप्राइज़ सुविधाओं तक पहुंचने के लिए अपने वर्तमान सदस्यता स्तर को अपग्रेड करना चाहते हैं।",
+        "fr": "Nous souhaitons examiner la mise a niveau de notre forfait vers une offre entreprise.",
+        "ar": "نود استكشاف ترقية باقة اشتراكنا الحالية للوصول إلى ميزات المؤسسات."
+      },
+      "AGENT": {
+        "en": "I have prepared an upgrade proposal outlining the enterprise features, discounted pricing, and seamless migration steps.",
+        "es": "He preparado una propuesta con las caracteristicas empresariales, precios reducidos y pasos de migracion.",
+        "hi": "मैंने एंटरप्राइज़ सुविधाओं, रियायती मूल्य निर्धारण और माइग्रेशन चरणों की रूपरेखा वाला प्रस्ताव तैयार किया है।",
+        "fr": "J ai prepare une proposition de mise a niveau detaillant les fonctionnalites et tarifs preferentiels.",
+        "ar": "لقد أعددت مقترحا للترقية يوضح ميزات خطة المؤسسات والأسعار المخفضة وخطوات الترحيل."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Sales lead route assigned to account team.",
+        "es": "NOTA DEL SISTEMA: Oportunidad de venta asignada al equipo de cuentas.",
+        "hi": "सिस्टम नोट: बिक्री अवसर खाता टीम को सौंपा गया।",
+        "fr": "NOTE SYSTEME: Opportunite commerciale transferee a l equipe compte.",
+        "ar": "ملاحظة النظام: تم تعيين فرصة البيع لفريق إدارة الحسابات."
+      }
+    },
+    "INT-011": {
+      "CUSTOMER": {
+        "en": "We intend to cancel our service subscription effective at the end of the current billing cycle.",
+        "es": "Tenemos la intencion de cancelar nuestra suscripcion al termino del ciclo de facturacion actual.",
+        "hi": "हम वर्तमान बिलिंग चक्र के अंत से अपनी सेवा सदस्यता रद्द करना चाहते हैं।",
+        "fr": "Nous avons l intention de resilier notre abonnement a la fin du cycle de facturation en cours.",
+        "ar": "نعتزم إلغاء اشتراك الخدمة الخاص بنا اعتبارا من نهاية دورة الفوترة الحالية."
+      },
+      "AGENT": {
+        "en": "We have registered your cancellation request. Your account will remain active until the end of your billing cycle without auto-renewal.",
+        "es": "Hemos registrado su solicitud de cancelacion. Su cuenta permanecera activa hasta el final del ciclo sin renovacion.",
+        "hi": "हमने आपका रद्दीकरण अनुरोध दर्ज कर लिया है। आपका खाता बिना स्वतः नवीनीकरण के बिलिंग चक्र के अंत तक सक्रिय रहेगा।",
+        "fr": "Nous avons enregistre votre demande de resiliation. Votre acces reste actif jusqu a la fin du cycle sans renouvellement.",
+        "ar": "لقد سجلنا طلب الإلغاء الخاص بك. سيبقى حسابك نشطا حتى نهاية دورة الفوترة دون تجديد تلقائي."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: Subscription cancellation scheduled at cycle end.",
+        "es": "NOTA DEL SISTEMA: Cancelacion de suscripcion programada al final del ciclo.",
+        "hi": "सिस्टम नोट: चक्र के अंत में सदस्यता रद्दीकरण निर्धारित किया गया।",
+        "fr": "NOTE SYSTEME: Resiliation d abonnement planifiee en fin de cycle.",
+        "ar": "ملاحظة النظام: تمت جدولة إلغاء الاشتراك في نهاية الدورة."
+      }
+    },
+    "INT-012": {
+      "CUSTOMER": {
+        "en": "Hello, could you provide information about your service terms, uptime guarantees, and support options?",
+        "es": "Hola, ¿podrian facilitarnos informacion sobre las condiciones de servicio, garantias de disponibilidad y soporte?",
+        "hi": "नमस्ते, क्या आप अपनी सेवा की शर्तों, अपटाइम गारंटी और सहायता विकल्पों के बारे में जानकारी प्रदान कर सकते हैं?",
+        "fr": "Bonjour, pourriez-vous fournir des informations sur vos conditions de service et disponibilites?",
+        "ar": "مرحبا، هل يمكنكم تزويدنا بمعلومات حول شروط الخدمة وضمانات وقت التشغيل وخيارات الدعم؟"
+      },
+      "AGENT": {
+        "en": "I am happy to share our product documentation, SLA terms, and available support coverage channels.",
+        "es": "Sera un placer compartir nuestra documentacion de producto, terminos de SLA y canales de atencion.",
+        "hi": "मुझे हमारे उत्पाद दस्तावेज़, एसएलए शर्तें और उपलब्ध सहायता चैनल साझा करने में खुशी होगी।",
+        "fr": "Je vous transmets volontiers notre documentation technique, conditions SLA et niveaux de support.",
+        "ar": "يسعدني مشاركة وثائق المنتج وشروط مستوى الخدمة وقنوات الدعم المتاحة لدينا."
+      },
+      "SYSTEM": {
+        "en": "SYSTEM NOTE: General inquiry response dispatched.",
+        "es": "NOTA DEL SISTEMA: Respuesta a consulta general enviada.",
+        "hi": "सिस्टम नोट: सामान्य पूछताछ प्रतिक्रिया भेजी गई।",
+        "fr": "NOTE SYSTEME: Reponse a la demande generale transmise.",
+        "ar": "ملاحظة النظام: تم إرسال الرد على الاستفسار العام."
+      }
+    }
+  },
+  "system_notes": {
+    "EMAIL_ACK": {
+      "en": "Thank you for contacting YottaFlex Support. Your ticket has been received and our team will respond shortly.",
+      "es": "Gracias por contactar con Soporte YottaFlex. Su solicitud ha sido recibida y le responderemos a la brevedad.",
+      "hi": "YottaFlex सहायता से संपर्क करने के लिए धन्यवाद। आपका टिकट प्राप्त हो गया है और हमारी टीम जल्द ही जवाब देगी।",
+      "fr": "Merci d avoir contacte le Support YottaFlex. Votre demande a ete recue et nous y repondrons rapidement.",
+      "ar": "شكرا لتواصلك مع دعم YottaFlex. تم استلام تذكرتك وسيقوم فريقنا بالرد قريبا."
+    },
+    "ESCALATION": {
+      "en": "SYSTEM NOTE: Ticket escalated to higher support tier per routing rules.",
+      "es": "NOTA DEL SISTEMA: Ticket escalado a un nivel de soporte superior segun las reglas de enrutamiento.",
+      "hi": "सिस्टम नोट: रूटिंग नियमों के अनुसार टिकट उच्च सहायता स्तर पर भेजा गया।",
+      "fr": "NOTE SYSTEME: Ticket transfere au niveau superieur selon les regles de routage.",
+      "ar": "ملاحظة النظام: تم تصعيد التذكرة إلى مستوى دعم أعلى وفقا لقواعد التوجيه."
+    },
+    "RESOLUTION": {
+      "en": "SYSTEM NOTE: Ticket marked as resolved following support review.",
+      "es": "NOTA DEL SISTEMA: Ticket marcado como resuelto tras la revision de soporte.",
+      "hi": "सिस्टम नोट: सहायता समीक्षा के बाद टिकट को हल के रूप में चिह्नित किया गया।",
+      "fr": "NOTE SYSTEME: Ticket marque comme resolu suite au traitement du support.",
+      "ar": "ملاحظة النظام: تم تحديد التذكرة كمحلولة بعد مراجعة الدعم."
+    }
+  },
+  "followups": {
+    "CUSTOMER": {
+      "en": "Thank you for the update. Here is the additional information you requested.",
+      "es": "Gracias por la actualizacion. Aqui tiene la informacion adicional que solicito.",
+      "hi": "अपडेट के लिए धन्यवाद। यहाँ अतिरिक्त जानकारी है जिसका आपने अनुरोध किया था।",
+      "fr": "Merci pour le retour. Voici les informations complementaires demandees.",
+      "ar": "شكرا على التحديث. إليك المعلومات الإضافية التي طلبتها."
+    },
+    "AGENT": {
+      "en": "Thank you for providing the details. I have applied the updates and everything is running properly.",
+      "es": "Gracias por proporcionar los detalles. He aplicado las actualizaciones y todo funciona correctamente.",
+      "hi": "विवरण प्रदान करने के लिए धन्यवाद। मैंने अपडेट लागू कर दिए हैं और सब कुछ सही चल रहा है।",
+      "fr": "Merci pour les precisions. J ai applique les modifications et tout fonctionne correctement.",
+      "ar": "شكرا لتقديم التفاصيل. لقد قمت بتطبيق التحديثات وكل شيء يعمل بشكل صحيح الآن."
+    }
+  }
+}

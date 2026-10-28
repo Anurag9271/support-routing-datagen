@@ -339,7 +339,7 @@ Expected reopen rate: 4-8% of tickets.
 
 1. **Waiting spells.** A waiting spell is an uninterrupted period in status QUEUED or ESCALATED. The language waiver (6.3) activates when one spell reaches the priority threshold and then holds for the rest of the cycle.
 2. **Active skill and queue.** The active skill is `intent.required_skill_id` and the active queue is `ticket.queue_id`, until a SKILL_REROUTE; after it, the active skill is the reroute skill and the active queue is that skill's SKILL queue, for the rest of the cycle. A reopen cycle resets both. H3, H3b and H6 are evaluated against the active skill and the event's queue (QUE-ESCALATION for ESCALATE, otherwise the active queue). AssignmentEvent `required_skill_id` and `queue_id` record them.
-3. **One mid-handling event per cycle.** At cycle start, draw in this order from fixed positions of the per-cycle draw vector: (a) PENDING with the intent's pending probability (7.4); else (b) SKILL_REROUTE with 4%, only if the active skill is BILLING, TECH, ACCOUNT or GENERAL, the priority is not P1 and the ticket has no incident_id; else (c) MANUAL_ESCALATION with 6% for ENTERPRISE and 2% for others; else none. The effective reroute rate is therefore about 3.5%.
+3. **One mid-handling event per cycle.** At cycle start, draw in this order from fixed positions of the per-cycle draw vector: (a) PENDING with the intent's pending probability (7.4); else (b) SKILL_REROUTE with 4%, only if the active skill is BILLING, TECH, ACCOUNT or GENERAL, the priority is not P1 and the ticket has no incident_id; else (c) MANUAL_ESCALATION with 6% for ENTERPRISE and 2% for others; else none. The effective reroute rate is therefore about 2.8%.
    The event is planned at every assignment of the cycle until it occurs: `planned_at = max(pickup_at + 60 s, t + u x R)`, where `t` is the assignment time, `R` the remaining work, and `u` is drawn once per cycle (uniform: pending 0.4-0.6, reroute 0.2-0.8, manual 0.3-0.9). It is valid only if `planned_at` is before the scheduled resolution; otherwise it is skipped for this assignment and retried at the next. A planned event whose epoch is stale is discarded.
    Reroute target (drawn once per cycle): BILLING -> ACCOUNT; TECH -> ACCOUNT; ACCOUNT -> BILLING or TECH with equal probability; GENERAL -> BILLING, TECH, ACCOUNT or SALES uniformly. A manual escalation planned while the owner is T3 is consumed with no effect.
 4. **Pending customer.** At `planned_at`: IN_PROGRESS -> PENDING_CUSTOMER (actor AGENT, the owner). It is not planned if fewer than 10 minutes of the owner's shift remain. `reply_at = min(planned_at + D, owner_shift_end - 60 s)`, with D lognormal (median 45 min, sigma 0.7), at least 1 minute. Work does not accrue while pending. With probability 3% per episode the customer stays silent: PENDING_CUSTOMER -> RESOLVED at `reply_at` by the owner (resolution kind NO_CUSTOMER_RESPONSE). Otherwise PENDING_CUSTOMER -> IN_PROGRESS at `reply_at` (actor CUSTOMER), and `resolved_at = max(reply_at + remaining work, reply_at + 60 s)`. A pending ticket counts toward the owner's load.
@@ -384,9 +384,9 @@ Boundary cases that tests must cover: arrival exactly at open, exactly at close,
 - Message 1 is the customer's opening message at `created_at`, seq 1, no reply link.
 - EMAIL tickets also get a SYSTEM auto-acknowledgement 5-60 seconds after message 1 (seq 2). It does not count as a first response.
 - Each cycle has at least one AGENT message (the first response, at the IN_PROGRESS transition). Agent and customer follow-ups alternate in the thread. `in_reply_to_message_id` points to the latest message from the other party. SYSTEM notes reply to the message that triggered them.
-- A SYSTEM note is written at each escalation and at resolution.
+- A SYSTEM note is written at each escalation and at the resolution of an escalated ticket only. The 100,000 message target would otherwise be exceeded by the base count.
 - The sender of every AGENT message must be the ticket's owner at that time (checked by the validator).
-- Agent message language: a language the agent speaks. For LANGUAGE_FALLBACK assignments the agent writes in `en` while the customer's messages stay in the ticket language, which is the language-mismatch signal.
+- The language of an agent message is decided per assignment event; a LANGUAGE_FALLBACK assignment writes in en, and a later owner fluent in the ticket language writes in that language.
 - Bodies come from a template library keyed by `(intent, sender_type, language)` and filled with synthetic values. Templates are short and neutral. Non-English templates are machine-drafted and human-reviewed once (see section 16).
 
 **Count calibration.** Natural counts from the rules above give a mean near 3.3 messages per ticket. The total must equal `--messages` exactly. A calibration pass adds or removes optional customer/agent follow-up pairs on tickets (chosen by seeded order, never touching seq 1, first responses, or required notes) until the total matches. If the natural total is more than 10% away from the target, the generator fails with an error instead of distorting the data.
@@ -409,7 +409,7 @@ latent = 4.3
 csat_score = clamp(round(latent), 1, 5)
 ```
 
-`csat_submitted_at` = `resolved_at` + lognormal(median 30 min, sigma 1.0). Expected mean CSAT: 3.6-4.1.
+`csat_submitted_at` = min(`resolved_at` + lognormal(median 30 min, sigma 1.0), cutoff). Expected mean CSAT: 3.6-4.1.
 
 ## 11. Anomaly injection
 
@@ -490,15 +490,17 @@ The generator writes `docs/validation_summary.md` and `data/kpi_summary.json`. T
 | After-hours arrivals | 8-20% |
 | P1 share | 4-8% |
 | Language fallback | 5-12% |
-| Tickets with >= 1 transfer | 8-15% |
-| Tickets with an SLA escalation | 5-12% |
+| Tickets with >= 1 transfer | 10-20% |
+| Tickets with an SLA escalation | 2-6% of cycles |
 | Reopen rate | 4-8% |
-| First-response breach rate | 8-15% |
-| Resolution breach rate | 5-12% |
+| First-response breach rate | 2-6% |
+| Resolution breach rate | 1-5% |
 | Survey response rate | 30-40% |
 | Mean CSAT | 3.6-4.1 |
 | Mean agent utilisation (time-weighted load / limit while on shift) | 10-25% (the volume-to-capacity ratio is fixed by 100 agents and 30,000 tickets) |
 | Max queue wait during a spike | Visibly higher than the daily median (reported per spike window) |
+
+Note that a P1 FRT breach of 30-50% results from incident bursts and T2+ scarcity, and that P3/P4 breaches are near zero because utilisation is low (staffing arithmetic, fixed volume and capacity).
 
 KPI summary also reports SLA attainment and breach rate by channel and priority, median and 95th percentile wait, and per-intent volumes.
 

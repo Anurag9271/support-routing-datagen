@@ -55,7 +55,7 @@ from generator.simulation import (
 def phase3a_dataset(tmp_path_factory):
     """Run full Phase 1-3a simulation once at default scale and return tables + CSV paths."""
     out_dir = tmp_path_factory.mktemp("phase3a_data")
-    cfg = Config(seed=20261022, tickets=30000, agents=100, customers=12000)
+    cfg = Config(seed=20261022, tickets=30000, agents=100, customers=12000, phase3b_enabled=False)
     streams = init_rng_streams(cfg.seed)
 
     # Phase 1: Master tables
@@ -96,6 +96,7 @@ def phase3a_dataset(tmp_path_factory):
 # 1. Structural Integrity & Schema Checks
 # =============================================================================
 
+@pytest.mark.slow
 def test_id_patterns_and_uniqueness(phase3a_dataset) -> None:
     """Validate ID formats, PK uniqueness, and gapless seq_no per ticket."""
     status_df = phase3a_dataset["status_df"]
@@ -129,6 +130,7 @@ def test_id_patterns_and_uniqueness(phase3a_dataset) -> None:
         assert seqs == list(range(1, len(seqs) + 1)), f"Assignment seq not gapless for {tid}"
 
 
+@pytest.mark.slow
 def test_every_fk_resolves(phase3a_dataset) -> None:
     """Validate all foreign keys in status and assignment event tables."""
     tables = phase3a_dataset["tables"]
@@ -158,6 +160,7 @@ def test_every_fk_resolves(phase3a_dataset) -> None:
 # 2. Status Transition Rules (business_rules.md 7.1)
 # =============================================================================
 
+@pytest.mark.slow
 def test_allowed_status_transitions(phase3a_dataset) -> None:
     """Every status transition must follow allowed pairs in business_rules.md 7.1."""
     status_df = phase3a_dataset["status_df"]
@@ -184,6 +187,7 @@ def test_allowed_status_transitions(phase3a_dataset) -> None:
 # 3. Timestamp Ordering & Cutoff
 # =============================================================================
 
+@pytest.mark.slow
 def test_timestamp_ordering_and_cutoff(phase3a_dataset) -> None:
     """Validate chronological ordering per ticket and strict cutoff enforcement."""
     status_df = phase3a_dataset["status_df"]
@@ -219,6 +223,7 @@ def test_timestamp_ordering_and_cutoff(phase3a_dataset) -> None:
 # 4. H1-H7 Eligibility Independent Recomputation
 # =============================================================================
 
+@pytest.mark.slow
 def test_h1_to_h7_eligibility_recomputed_independently(phase3a_dataset) -> None:
     """For every assignment event, recompute H1-H7 from master tables."""
     tables = phase3a_dataset["tables"]
@@ -334,6 +339,7 @@ def test_h1_to_h7_eligibility_recomputed_independently(phase3a_dataset) -> None:
 # 5. Load Replay Verification (business_rules.md 6.6)
 # =============================================================================
 
+@pytest.mark.slow
 def test_load_replay_verification(phase3a_dataset) -> None:
     """Replay assignments and releases chronologically; verify load_before matches."""
     status_df = phase3a_dataset["status_df"]
@@ -376,6 +382,7 @@ def test_load_replay_verification(phase3a_dataset) -> None:
 # 6. Handover, from_agent_id, and Inactive Agent Checks
 # =============================================================================
 
+@pytest.mark.slow
 def test_handover_and_agent_constraints(phase3a_dataset) -> None:
     """Validate from_agent_id rules, no duplicate agents, and inactive agents excluded."""
     asn_df = phase3a_dataset["assignment_df"]
@@ -407,7 +414,7 @@ def test_handover_and_agent_constraints(phase3a_dataset) -> None:
 
 def test_simulation_reproducibility(tmp_path: Path) -> None:
     """Running simulation twice with same seed produces 100% byte-identical CSVs."""
-    cfg = Config(seed=20261022, tickets=1000, agents=20, customers=300)
+    cfg = Config(seed=20261022, tickets=1000, agents=20, customers=300, phase3b_enabled=False)
 
     # Run 1
     dir1 = tmp_path / "run1"
@@ -453,7 +460,7 @@ def test_tiny_handbuilt_scenario_boundary_cases() -> None:
     5. Language fallback triggers at exactly the threshold
     6. P1 ticket needs T2+ and PROFICIENT
     """
-    cfg = Config(seed=20261022, tickets=6, agents=3)
+    cfg = Config(seed=20261022, tickets=6, agents=3, phase3b_enabled=False)
 
     # 3 agents:
     # AGT-000001: T2, en + es, SKL-TECH PROFICIENT, DAY (10:00-18:00), limit 2
@@ -504,6 +511,16 @@ def test_tiny_handbuilt_scenario_boundary_cases() -> None:
         {"intent_id": "INT-008", "intent_code": "SECURITY_BREACH", "intent_name": "Security", "category": "TECHNICAL", "required_skill_id": "SKL-TECH", "default_priority": "P1", "is_safety_related": True, "volume_weight_pct": 1.0, "median_handle_minutes": 45.0, "allows_prospect": False},
     ])
 
+    prio_rules = pd.DataFrame([
+        {"rule_id": "PRL-001", "rule_type": "SLA_TARGET", "rule_name": "P1 Target", "priority_level": "P1", "segment": "", "upgrade_levels": "", "floor_priority_level": "", "first_response_min": 15, "resolution_min": 240, "escalation_after_min": 60, "calendar_code_override": "CAL-247", "precedence": 9, "effective_from": "2026-01-05", "effective_to": "", "description": ""},
+        {"rule_id": "PRL-004", "rule_type": "SLA_TARGET", "rule_name": "P3 Target", "priority_level": "P3", "segment": "", "upgrade_levels": "", "floor_priority_level": "", "first_response_min": 240, "resolution_min": 1440, "escalation_after_min": 720, "calendar_code_override": "", "precedence": 9, "effective_from": "2026-01-05", "effective_to": "", "description": ""},
+    ])
+
+    cust_table = pd.DataFrame([
+        {"customer_id": f"CUST-{i:06d}", "segment": "CONSUMER", "preferred_language": "en"}
+        for i in range(1, 7)
+    ])
+
     master_tables = {
         "Agent": agent_df,
         "AgentSkill": skills_df,
@@ -512,6 +529,8 @@ def test_tiny_handbuilt_scenario_boundary_cases() -> None:
         "AgentShift": shift_df,
         "Queue": queue_table,
         "Intent": intent_table,
+        "PriorityRule": prio_rules,
+        "Customer": cust_table,
     }
 
     # 6 test tickets:
