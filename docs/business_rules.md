@@ -224,6 +224,8 @@ If no agent is eligible, the ticket stays QUEUED. Waiting tickets are served in 
 
 Capacity and skill are never waived. Fallback is valid baseline behaviour, not an anomaly. Expected fallback share: about 2-6% of tickets, mostly ar, hi and fr tickets on NIGHT or weekend hours.
 
+The waiver is per cycle: once a ticket's wait exceeds its threshold, H4 stays waived for the rest of that cycle, including SHIFT_HANDOVER assignments. While waived, candidates are ranked language-match first, then by the normal score (6.2). The reason code is LANGUAGE_FALLBACK only on an ASSIGN event whose chosen agent lacks the language.
+
 ### 6.4 Transfers, handovers and reopen routing
 
 All use the same rules, with these differences:
@@ -241,6 +243,17 @@ All use the same rules, with these differences:
 | TRANSFER | SHIFT_HANDOVER, SKILL_REROUTE | required |
 | ESCALATE | SLA_ESCALATION, MANUAL_ESCALATION | required |
 | REOPEN_ASSIGN | REOPEN_ROUTING | null |
+
+### 6.6 Simulation mechanics
+
+- **Ordering.** The event queue is ordered by `(timestamp, rank, ticket_id)`. Ranks: 1 RESOLVE, 2 SHIFT_END, 3 SHIFT_START, 4 FALLBACK_DUE, 5 PICKUP (first agent action, moves ASSIGNED to IN_PROGRESS), 6 ENQUEUE (NEW to QUEUED). After all events at one timestamp are processed, one DISPATCH pass runs. A ticket resolved at exactly a shift-end instant is resolved before the handover.
+- **Epochs.** Each assignment increments the ticket's epoch. Scheduled RESOLVE and PICKUP events carry the epoch they were created in and are discarded if stale.
+- **Dispatch.** The waiting list is every ticket in QUEUED plus handover tickets in limbo (below), ordered by `(priority, first_response_due, ticket_id)`. `first_response_due` is computed from the PriorityRule and `sla_calendar.py`, never read from ground truth. There is no head-of-line blocking: each waiting ticket is tried in order against the eligible agents.
+- **Shift boundaries.** An agent is on shift in `[start, end)`. At SHIFT_END, every ticket the agent owns (ASSIGNED or IN_PROGRESS), in ticket_id order, goes into handover limbo. During the same timestamp's dispatch, a limbo ticket that finds an eligible agent is assigned directly (status IN_PROGRESS or ASSIGNED to ASSIGNED, `wait_minutes` = 0). Limbo tickets still unassigned after dispatch get a `-> QUEUED` status event at that instant, and their wait clock starts there.
+- **Work accounting.** Each ticket draws total work `W` once. Work accrues in wall-clock seconds while the ticket is owned (ASSIGNED or IN_PROGRESS); time spent QUEUED does not count. On any assignment at time `t` with remaining work `R`: `pickup_at = t + pickup_delay` (drawn as in 7.2; the first assignment's pickup is the first response), and `resolved_at = max(t + R, pickup_at + 60 s)`.
+- **Draws.** All per-ticket randomness comes from a fixed-size vector pre-drawn from `ticket_rng(seed, ticket_number, "handle_times")`, indexed by purpose (work, pickup delay by assignment number, classification delay), so draws never depend on simulation order.
+- **Sequencing.** `seq_no` for status and assignment events follows emission order, which is chronological per ticket. IDs are assigned from `seq_no`.
+- **Load replay.** A validator reconstructs load from the event tables. Releases at timestamp `t` (RESOLVED, `-> QUEUED` from an owned state, or a TRANSFER away) apply before assignments at `t`. For assignments to one agent at one timestamp, sorting by `agent_load_before` must give `base, base+1, base+2...`.
 
 ## 7. Ticket lifecycle simulation
 
@@ -430,7 +443,7 @@ The validator has two modes. `--mode integrity` runs every check on the input ta
 | V-ARITH-01 | Reconciliation: reopen_count = REOPENED events = max cycle_no - 1; current_status and last_status_at = last status event; transfer_count and escalation_count match events; load_after = load_before + 1; total messages = target; volume weights sum to 100 | error |
 | V-LIFE-01 | Every status transition is allowed; one open cycle at a time; no events after CLOSED; cycle_no increases only at REOPENED | error |
 | V-ROUT-SKILL-01 | Assigned agent holds `required_skill_id` on event date; P1 and P2 need PROFICIENT or better | error |
-| V-ROUT-LANG-01 | Language match, unless reason is LANGUAGE_FALLBACK and the wait exceeded the threshold | error |
+| V-ROUT-LANG-01 | Language match, unless the cycle's waiver was active at event time (the ticket waited at least the threshold in a QUEUED spell earlier in this cycle). | error |
 | V-ROUT-CAP-01 | Replay assignments and releases; `load_before` equals the replayed value and `load_after <= concurrency_limit` | error |
 | V-ROUT-SHIFT-01 | Agent on shift at event time; INACTIVE agents never assigned | error |
 | V-ROUT-TIER-01 | Tier and queue-membership constraints; ESCALATE goes to exactly tier + 1 | error |
