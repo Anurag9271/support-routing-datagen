@@ -8,7 +8,7 @@ Defines how the data is generated, how decisions are made, how derived values ar
 |---|---|
 | Seed | `20261022` |
 | Arrival window | `2026-01-05T00:00:00Z` (Monday) up to but excluding `2026-04-05T00:00:00Z` = 90 days |
-| Dataset cutoff | `2026-04-12T00:00:00Z` (window end + 7 days). No event after the cutoff is emitted. Anything unfinished at the cutoff stays in its current state. |
+| Dataset cutoff | `2026-04-05T00:00:00Z` (= window end). The dataset is a snapshot at the end of the 90-day window: tickets still in flight stay open, tickets resolved less than 72 h earlier stay RESOLVED, and no event after the cutoff is emitted. |
 | Time zone | UTC everywhere, no DST |
 | Time arithmetic | Integer seconds. Minutes are converted to seconds first. No floating-point date math. |
 | Default scale | 30,000 tickets, 100 agents, 100,000 messages (exact), about 12,000 customers (`tickets x 0.4`) |
@@ -306,7 +306,7 @@ Pending time still counts toward agent load (see 6.1) and does not pause the SLA
 
 - **SKILL_REROUTE:** 4% of tickets per cycle, once per cycle, at a random point during handling. Target skill is drawn from the ticket category's related skills (BILLING <-> ACCOUNT, TECH <-> ACCOUNT, GENERAL -> any).
 - **SHIFT_HANDOVER:** deterministic, from shift ends (6.4).
-- Baseline caps per cycle: at most 1 SKILL_REROUTE, at most 3 SHIFT_HANDOVER, and no agent appears twice.
+- Baseline rules per cycle: at most 1 SKILL_REROUTE, and no agent appears twice. SHIFT_HANDOVER is not capped (a long ticket can legitimately cross several shifts; the observed maximum is reported in the KPI summary).
 
 Expected: 8-15% of tickets have at least one transfer.
 
@@ -505,3 +505,4 @@ KPI summary also reports SLA attainment and breach rate by channel and priority,
 - Agent handle time is a wall-clock duration that holds one capacity slot; there is no per-channel capacity weighting.
 - Non-English message templates are machine-drafted and only lightly reviewed.
 - No external data is used. All records are synthetic (see `source_manifest.md`).
+- The first six hours of 2026-01-05 have no agents on shift (there is no Sunday-night shift before the window), so a few tickets wait until 06:00

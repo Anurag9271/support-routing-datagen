@@ -26,7 +26,7 @@ class Config:
     seed: int = 20261022
     window_start: str = "2026-01-05T00:00:00Z"
     window_end: str = "2026-04-05T00:00:00Z"
-    cutoff: str = "2026-04-12T00:00:00Z"
+    cutoff: str = "2026-04-05T00:00:00Z"
     timezone: str = "UTC"
     days: int = 90
 

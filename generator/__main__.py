@@ -21,6 +21,13 @@ from generator.tickets import (
     export_ticket_draft,
     export_ground_truth_decisions,
 )
+from generator.simulation import (
+    simulate_routing,
+    export_ticket_status_events,
+    export_assignment_events,
+    export_ticket_outcomes,
+    generate_kpi_report,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -142,6 +149,30 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"Phase 2: Generated {len(ticket_draft_df)} ticket drafts -> {draft_path}")
     print(f"Phase 2: Generated {len(gt_decisions_df)} ground truth decisions -> {decisions_path}")
+
+    # --- Phase 3a: Discrete-event routing simulation and staging drafts ---
+    print("\nPhase 3a: Running discrete-event routing simulation...")
+    status_df, assignment_df, outcome_df = simulate_routing(config, tables, ticket_draft_df)
+
+    status_path = export_ticket_status_events(
+        status_df, staging_dir / "ticket_status_event_draft.csv"
+    )
+    asn_path = export_assignment_events(
+        assignment_df, staging_dir / "assignment_event_draft.csv"
+    )
+    outcome_path = export_ticket_outcomes(
+        outcome_df, staging_dir / "ticket_outcome_draft.csv"
+    )
+
+    print(f"Phase 3a: Exported {len(status_df)} status events -> {status_path}")
+    print(f"Phase 3a: Exported {len(assignment_df)} assignment events -> {asn_path}")
+    print(f"Phase 3a: Exported {len(outcome_df)} ticket outcomes -> {outcome_path}")
+
+    # Print Phase 3a KPI report
+    kpi_report = generate_kpi_report(
+        ticket_draft_df, status_df, assignment_df, outcome_df, tables, all_windows
+    )
+    print(kpi_report)
 
     return 0
 
