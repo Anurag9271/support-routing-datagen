@@ -155,15 +155,19 @@ Channel mix: CONSUMER and SMB: EMAIL 50%, CHAT 40%, PHONE 10%. ENTERPRISE: EMAIL
 
 Intent is drawn from the intent weights (section 2.3), restricted to `allows_prospect` intents for PROSPECT customers. The intent weights are renormalised after that restriction.
 
+Because prospects (10% of customers) draw only from allows_prospect intents, the realised SALES_PRESALES and GENERAL_QUESTION shares are higher than their weights (SALES about 14%), and other intents are slightly lower. This is accepted.
+
 ### 4.2 Queue spikes
 
-5 spike windows chosen by seed on weekdays, each 2-3 hours long. Within a window the arrival rate is multiplied by 4. During a spike the intent mix is skewed (BILLING and PAYMENT_FAILURE x3 for 3 spikes; TECH_TROUBLESHOOTING x3 for 2). Spike tickets are about 5% of the total.
+5 spike windows chosen by seed on weekdays, each 2-3 hours long. Within a window the arrival rate is multiplied by 4. During a spike the intent mix is skewed (BILLING and PAYMENT_FAILURE x3 for 3 spikes; TECH_TROUBLESHOOTING x3 for 2). The x4 multiplier is applied to the hourly arrival weights, so spike tickets emerge from the single allocation of all tickets (about 2% of the total)
 
 ### 4.3 Critical incidents
 
 6 incident windows (`INC-001`..`INC-006`), each 90-240 minutes, on different days. Each generates 100-250 `OUTAGE_REPORT` tickets, skewed to CHAT and PHONE. Incident tickets have `incident_id` set and `is_critical_incident = true`, and are P1. Their median handle time is 15 minutes (known-incident macro replies). Incident tickets total about 4% of volume.
 
 Baseline tickets are scaled so that baseline + spike + incident = the `--tickets` total exactly.
+
+Scaled runs: `n_incidents = min(6, max(1, tickets // 2000))` and `n_spikes = min(5, max(1, tickets // 2000))`. Total incident tickets = `round(0.04 x tickets)`, split across incidents with +/-30% jitter that still sums exactly (about 200 each at 30,000 tickets).
 
 ## 5. Priority classification
 
@@ -327,6 +331,7 @@ All SLA values are derived from source records by one shared module (`generator/
 - `next_open(cal, t)`: `t` if open, else the next window start.
 - `add_business_minutes(cal, start, m)`: advance from `start`, consuming only open time. `m = 0` returns `start`.
 - `business_minutes(cal, a, b)`: total open time in `[a, b)`; 0 if `b <= a`.
+- Boundary rule: if the minutes run out exactly at a close time, `add_business_minutes` returns the close instant and does not roll forward to the next open. A response at exactly the due time is not a breach.
 
 ### 8.2 Per cycle
 

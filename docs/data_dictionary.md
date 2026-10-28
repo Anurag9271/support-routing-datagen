@@ -212,7 +212,7 @@ One table holds SLA targets (versioned) and priority-classification rules.
 | channel_id | string | Y | FK -> Channel | - | Must exist |
 | intent_id | string | Y | FK -> Intent | - | If customer_type = PROSPECT, intent.allows_prospect must be true |
 | queue_id | string | Y | FK -> Queue | - | Initial queue; never changes. P1 -> QUE-INCIDENT, else the queue of the intent's required skill |
-| language_code | string | Y | FK -> Language | - | = customer.preferred_language, except 5% of tickets use `en` |
+| language_code | string | Y | FK -> Language | - | = customer.preferred_language, except 5% of non-English customers' tickets use `en` |
 | created_at | timestamp | Y | 2026-01-05T00:00:00Z to < 2026-04-05T00:00:00Z | - | First TicketStatusEvent (NEW) has the same timestamp |
 | subject | string | Y | Template text | - | Non-empty |
 | priority_level | string | Y | `P1`-`P4` | - | Must equal the level derived by the classification rules (see business_rules.md section 5) |
