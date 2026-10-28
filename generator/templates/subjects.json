@@ -1,0 +1,89 @@
+{
+  "review_status": "machine_drafted",
+  "subjects": {
+    "INT-001": {
+      "en": "Question regarding recent invoice charges",
+      "es": "Consulta sobre cargos en factura reciente",
+      "hi": "हालिया चालान शुल्क के संबंध में प्रश्न",
+      "ar": "استفسار بخصوص رسوم الفاتورة الأخيرة",
+      "fr": "Question concernant les frais de facturation"
+    },
+    "INT-002": {
+      "en": "Request for refund on transaction",
+      "es": "Solicitud de reembolso de transaccion",
+      "hi": "लेन-देन पर रिफंड का अनुरोध",
+      "ar": "طلب استرداد مبلغ المعاملة",
+      "fr": "Demande de remboursement de transaction"
+    },
+    "INT-003": {
+      "en": "Payment transaction failed during checkout",
+      "es": "Fallo en transaccion de pago",
+      "hi": "भुगतान लेनदेन विफल हुआ",
+      "ar": "فشل عملية الدفع الإلكتروني",
+      "fr": "Echec du paiement lors de transaction"
+    },
+    "INT-004": {
+      "en": "Technical error assistance needed",
+      "es": "Asistencia por error tecnico requerida",
+      "hi": "तकनीकी त्रुटि सहायता की आवश्यकता",
+      "ar": "طلب مساعدة بخصوص خطأ تقني",
+      "fr": "Assistance requise pour erreur technique"
+    },
+    "INT-005": {
+      "en": "Service outage and connectivity issue",
+      "es": "Corte de servicio y conectividad",
+      "hi": "सेवा में रुकावट और कनेक्टिविटी समस्या",
+      "ar": "انقطاع الخدمة ومشكلة الاتصال",
+      "fr": "Interruption de service et probleme reseau"
+    },
+    "INT-006": {
+      "en": "Trouble accessing user account",
+      "es": "Problema para acceder a la cuenta",
+      "hi": "उपयोगकर्ता खाते तक पहुंचने में समस्या",
+      "ar": "صعوبة في الوصول إلى الحساب",
+      "fr": "Difficulte d acces au compte utilisateur"
+    },
+    "INT-007": {
+      "en": "Request to update account profile details",
+      "es": "Actualizacion de detalles del perfil",
+      "hi": "खाता प्रोफ़ाइल विवरण अपडेट करने का अनुरोध",
+      "ar": "طلب تحديث بيانات الملف الشخصي",
+      "fr": "Mise a jour des donnees du profil"
+    },
+    "INT-008": {
+      "en": "Urgent notification of suspected security breach",
+      "es": "Notificacion urgente por sospecha de brecha",
+      "hi": "संदिग्ध सुरक्षा उल्लंघन की तत्काल सूचना",
+      "ar": "إخطار عاجل بشأن اشتباه اختراق أمني",
+      "fr": "Notification urgente de violation de securite"
+    },
+    "INT-009": {
+      "en": "Urgent report of product safety hazard",
+      "es": "Reporte urgente de riesgo de seguridad",
+      "hi": "उत्पाद सुरक्षा खतरे की तत्काल रिपोर्ट",
+      "ar": "تقرير عاجل حول خطر سلامة المنتج",
+      "fr": "Signalement urgent de risque de securite"
+    },
+    "INT-010": {
+      "en": "Inquiry regarding service pricing and plans",
+      "es": "Consulta sobre planes y precios disponibles",
+      "hi": "मूल्य निर्धारण और योजनाओं के बारे में पूछताछ",
+      "ar": "استفسار عن خطط وأسعار الخدمة",
+      "fr": "Renseignements sur les tarifs et forfaits"
+    },
+    "INT-011": {
+      "en": "General information request about services",
+      "es": "Solicitud de informacion general del servicio",
+      "hi": "सेवाओं के बारे में सामान्य जानकारी अनुरोध",
+      "ar": "طلب معلومات عامة حول الخدمات",
+      "fr": "Demande d informations generales sur services"
+    },
+    "INT-012": {
+      "en": "Customer feedback regarding recent experience",
+      "es": "Comentarios y quejas sobre la experiencia",
+      "hi": "हाल के अनुभव के संबंध में ग्राहक प्रतिक्रिया",
+      "ar": "ملاحظات العملاء حول التجربة الأخيرة",
+      "fr": "Commentaires et avis sur le service"
+    }
+  }
+}

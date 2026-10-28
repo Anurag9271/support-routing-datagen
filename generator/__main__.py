@@ -14,6 +14,13 @@ from generator.config import Config
 from generator.rng import init_rng_streams
 from generator.master_data import build_master_data
 from generator.export import export_tables
+from generator.windows import build_scenario_windows, export_scenario_windows
+from generator.arrivals import generate_arrivals
+from generator.tickets import (
+    build_tickets,
+    export_ticket_draft,
+    export_ground_truth_decisions,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -67,7 +74,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Run Phase 1 generator: master data, population, and CSV export."""
+    """Run Phase 1 + Phase 2 generator."""
     args = parse_args(argv)
 
     customer_count = args.customers
@@ -85,18 +92,56 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print(
-        f"Support Routing Generator (Phase 1) | Seed: {config.seed} | "
-        f"Agents: {config.agents} | Customers: {config.customers} | Out: {config.out_dir}"
+        f"Support Routing Generator (Phase 1 + 2) | Seed: {config.seed} | "
+        f"Tickets: {config.tickets} | Agents: {config.agents} | Customers: {config.customers} | Out: {config.out_dir}"
     )
 
+    # Isolated RNG streams
     streams = init_rng_streams(config.seed)
+
+    # --- Phase 1: Master data & Customers ---
     tables = build_master_data(config, streams)
     exported = export_tables(tables, config.out_dir)
 
-    print(f"Successfully generated and exported {len(exported)} tables:")
+    print(f"Phase 1: Generated and exported {len(exported)} master data tables to {config.out_dir}:")
     for t_name in sorted(exported.keys()):
         row_cnt = len(tables[t_name])
         print(f"  - {t_name:20s}: {row_cnt:6d} rows -> {exported[t_name]}")
+
+    # Base directory for staging and ground_truth
+    out_dir_path = Path(config.out_dir)
+    base_dir = out_dir_path.parent if out_dir_path.name == "raw" else out_dir_path
+    staging_dir = base_dir / "staging"
+    ground_truth_dir = base_dir / "ground_truth"
+
+    # --- Phase 2: Scenario windows, Arrivals, Tickets & Ground Truth ---
+    incidents, spikes = build_scenario_windows(config, streams["arrivals"])
+    all_windows = incidents + spikes
+    windows_path = export_scenario_windows(
+        all_windows, ground_truth_dir / "scenario_windows.csv"
+    )
+    print(f"Phase 2: Generated {len(incidents)} incidents and {len(spikes)} spikes -> {windows_path}")
+
+    raw_arrivals = generate_arrivals(
+        config,
+        tables["Customer"],
+        tables["Intent"],
+        incidents,
+        spikes,
+        streams["arrivals"],
+    )
+
+    ticket_draft_df, gt_decisions_df = build_tickets(
+        config, raw_arrivals, tables["Intent"], tables["PriorityRule"]
+    )
+
+    draft_path = export_ticket_draft(ticket_draft_df, staging_dir / "ticket_draft.csv")
+    decisions_path = export_ground_truth_decisions(
+        gt_decisions_df, ground_truth_dir / "ground_truth_decisions.csv"
+    )
+
+    print(f"Phase 2: Generated {len(ticket_draft_df)} ticket drafts -> {draft_path}")
+    print(f"Phase 2: Generated {len(gt_decisions_df)} ground truth decisions -> {decisions_path}")
 
     return 0
 

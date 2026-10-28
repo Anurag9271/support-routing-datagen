@@ -10,3 +10,7 @@ venv/
 data/full/
 data/_check/
 data/raw/*.csv
+data/staging/*.csv
+data/ground_truth/*.csv
+data/staging/
+data/ground_truth/*.csv
