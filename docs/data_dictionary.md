@@ -270,8 +270,8 @@ One table holds SLA targets (versioned) and priority-classification rules.
 | event_at | timestamp | Y | - | - | >= the ticket's latest QUEUED/ESCALATED status event |
 | agent_id | string | Y | FK -> Agent | - | The agent who owns the ticket after this event |
 | from_agent_id | string | C | FK -> Agent | - | Null for ASSIGN and REOPEN_ASSIGN; required for TRANSFER and ESCALATE; must differ from agent_id and equal the previous event's agent_id |
-| queue_id | string | Y | FK -> Queue | - | ESCALATE = QUE-ESCALATION; others = ticket.queue_id |
-| required_skill_id | string | Y | FK -> Skill | - | The skill evaluated for this decision. Equals intent.required_skill_id except for SKILL_REROUTE (a different skill) |
+| queue_id | string | Y | FK -> Queue | - | ESCALATE = QUE-ESCALATION; otherwise the ticket's active queue (business_rules.md 7.8) |
+| required_skill_id | string | Y | FK -> Skill | - | The ticket's active skill (business_rules.md 7.8); equals intent.required_skill_id except after a SKILL_REROUTE |
 | language_match | bool | Y | - | - | true if the agent speaks the ticket language at FLUENT or better; false only when the cycle's language waiver is active (business_rules.md 6.3) |
 | wait_minutes | decimal | Y | >= 0, 1 dp | - | event_at minus the time the ticket entered QUEUED/ESCALATED |
 | agent_load_before | int | Y | >= 0 | - | Derived by replay: tickets the agent owned in ASSIGNED, IN_PROGRESS or PENDING_CUSTOMER just before event_at |

@@ -149,7 +149,7 @@ Expected tickets at time `t` for channel `c` = `base_daily x dow_weight x hour_w
 - `dow_weight`: Mon-Fri 1.0, Sat 0.55, Sun 0.45.
 - `hour_weight` (UTC): peaks 10:00-14:00 (1.0), shoulders 07:00-10:00 and 14:00-19:00 (0.7), 19:00-23:00 (0.35), 23:00-07:00 (0.15).
 - `channel_mask`: 1.0 inside the channel's open windows; outside it is the after-hours factor: EMAIL 0.35, CHAT 0.25, PHONE 0.10.
-- Target after-hours share: roughly 12-25% of tickets overall.
+- With the factors above, after-hours arrivals are about 11% overall (EMAIL about 16%, PHONE about 14%, CHAT about 4%). Accepted range: 8-20%. Weekend ticket shares (about 6% and 5%) are lower than `dow_weight` alone suggests, because EMAIL and PHONE are closed at weekends and the after-hours factor applies on top.
 
 Channel mix: CONSUMER and SMB: EMAIL 50%, CHAT 40%, PHONE 10%. ENTERPRISE: EMAIL 40%, CHAT 30%, PHONE 30%.
 
@@ -159,7 +159,7 @@ Because prospects (10% of customers) draw only from allows_prospect intents, the
 
 ### 4.2 Queue spikes
 
-5 spike windows chosen by seed on weekdays, each 2-3 hours long. Within a window the arrival rate is multiplied by 4. During a spike the intent mix is skewed (BILLING and PAYMENT_FAILURE x3 for 3 spikes; TECH_TROUBLESHOOTING x3 for 2). The x4 multiplier is applied to the hourly arrival weights, so spike tickets emerge from the single allocation of all tickets (about 2% of the total)
+Up to 5 spike windows chosen by seed on weekdays (scaled as in 4.3), each 2-3 hours long. Within a window the arrival rate is multiplied by 4. During a spike the intent mix is skewed (BILLING and PAYMENT_FAILURE x3 for 3 spikes; TECH_TROUBLESHOOTING x3 for 2). The x4 multiplier is applied to the hourly arrival weights, so spike tickets emerge from the single allocation of all tickets (about 2% of the total)
 
 ### 4.3 Critical incidents
 
@@ -222,7 +222,7 @@ If no agent is eligible, the ticket stays QUEUED. Waiting tickets are served in 
 | P3 | 30 |
 | P4 | 60 |
 
-Capacity and skill are never waived. Fallback is valid baseline behaviour, not an anomaly. Expected fallback share: about 2-6% of tickets, mostly ar, hi and fr tickets on NIGHT or weekend hours.
+Capacity and skill are never waived. Fallback is valid baseline behaviour, not an anomaly. The threshold is measured within a single uninterrupted QUEUED spell; the waiver activates the first time such a spell reaches the threshold and then holds for the rest of the cycle. Expected fallback share: about 5-12% of tickets (realised about 9%), concentrated in ar, fr and hi tickets because few agents combine those languages with the required skill and shift.
 
 The waiver is per cycle: once a ticket's wait exceeds its threshold, H4 stays waived for the rest of that cycle, including SHIFT_HANDOVER assignments. While waived, candidates are ranked language-match first, then by the normal score (6.2). The reason code is LANGUAGE_FALLBACK only on an ASSIGN event whose chosen agent lacks the language.
 
@@ -251,6 +251,7 @@ All use the same rules, with these differences:
 - **Dispatch.** The waiting list is every ticket in QUEUED plus handover tickets in limbo (below), ordered by `(priority, first_response_due, ticket_id)`. `first_response_due` is computed from the PriorityRule and `sla_calendar.py`, never read from ground truth. There is no head-of-line blocking: each waiting ticket is tried in order against the eligible agents.
 - **Shift boundaries.** An agent is on shift in `[start, end)`. At SHIFT_END, every ticket the agent owns (ASSIGNED or IN_PROGRESS), in ticket_id order, goes into handover limbo. During the same timestamp's dispatch, a limbo ticket that finds an eligible agent is assigned directly (status IN_PROGRESS or ASSIGNED to ASSIGNED, `wait_minutes` = 0). Limbo tickets still unassigned after dispatch get a `-> QUEUED` status event at that instant, and their wait clock starts there.
 - **Work accounting.** Each ticket draws total work `W` once. Work accrues in wall-clock seconds while the ticket is owned (ASSIGNED or IN_PROGRESS); time spent QUEUED does not count. On any assignment at time `t` with remaining work `R`: `pickup_at = t + pickup_delay` (drawn as in 7.2; the first assignment's pickup is the first response), and `resolved_at = max(t + R, pickup_at + 60 s)`.
+- **Work floor.** Remaining work is floored at 0 at handover; this can happen when `resolved_at` was clamped to `pickup_at + 60 s`.
 - **Draws.** All per-ticket randomness comes from a fixed-size vector pre-drawn from `ticket_rng(seed, ticket_number, "handle_times")`, indexed by purpose (work, pickup delay by assignment number, classification delay), so draws never depend on simulation order.
 - **Sequencing.** `seq_no` for status and assignment events follows emission order, which is chronological per ticket. IDs are assigned from `seq_no`.
 - **Load replay.** A validator reconstructs load from the event tables. Releases at timestamp `t` (RESOLVED, `-> QUEUED` from an owned state, or a TRANSFER away) apply before assignments at `t`. For assignments to one agent at one timestamp, sorting by `agent_load_before` must give `base, base+1, base+2...`.
@@ -333,6 +334,20 @@ Sequence: status `-> ESCALATED` at that instant (actor SYSTEM, previous owner re
 - Reopen-cycle SLA targets: first response and resolution are 50% of the rule value (rounded up). Escalation timer is the rule value.
 
 Expected reopen rate: 4-8% of tickets.
+
+### 7.8 Mechanics added in Phase 3b (supersedes conflicting wording in 6.3, 6.6, 7.4-7.7)
+
+1. **Waiting spells.** A waiting spell is an uninterrupted period in status QUEUED or ESCALATED. The language waiver (6.3) activates when one spell reaches the priority threshold and then holds for the rest of the cycle.
+2. **Active skill and queue.** The active skill is `intent.required_skill_id` and the active queue is `ticket.queue_id`, until a SKILL_REROUTE; after it, the active skill is the reroute skill and the active queue is that skill's SKILL queue, for the rest of the cycle. A reopen cycle resets both. H3, H3b and H6 are evaluated against the active skill and the event's queue (QUE-ESCALATION for ESCALATE, otherwise the active queue). AssignmentEvent `required_skill_id` and `queue_id` record them.
+3. **One mid-handling event per cycle.** At cycle start, draw in this order from fixed positions of the per-cycle draw vector: (a) PENDING with the intent's pending probability (7.4); else (b) SKILL_REROUTE with 4%, only if the active skill is BILLING, TECH, ACCOUNT or GENERAL, the priority is not P1 and the ticket has no incident_id; else (c) MANUAL_ESCALATION with 6% for ENTERPRISE and 2% for others; else none. The effective reroute rate is therefore about 3.5%.
+   The event is planned at every assignment of the cycle until it occurs: `planned_at = max(pickup_at + 60 s, t + u x R)`, where `t` is the assignment time, `R` the remaining work, and `u` is drawn once per cycle (uniform: pending 0.4-0.6, reroute 0.2-0.8, manual 0.3-0.9). It is valid only if `planned_at` is before the scheduled resolution; otherwise it is skipped for this assignment and retried at the next. A planned event whose epoch is stale is discarded.
+   Reroute target (drawn once per cycle): BILLING -> ACCOUNT; TECH -> ACCOUNT; ACCOUNT -> BILLING or TECH with equal probability; GENERAL -> BILLING, TECH, ACCOUNT or SALES uniformly. A manual escalation planned while the owner is T3 is consumed with no effect.
+4. **Pending customer.** At `planned_at`: IN_PROGRESS -> PENDING_CUSTOMER (actor AGENT, the owner). It is not planned if fewer than 10 minutes of the owner's shift remain. `reply_at = min(planned_at + D, owner_shift_end - 60 s)`, with D lognormal (median 45 min, sigma 0.7), at least 1 minute. Work does not accrue while pending. With probability 3% per episode the customer stays silent: PENDING_CUSTOMER -> RESOLVED at `reply_at` by the owner (resolution kind NO_CUSTOMER_RESPONSE). Otherwise PENDING_CUSTOMER -> IN_PROGRESS at `reply_at` (actor CUSTOMER), and `resolved_at = max(reply_at + remaining work, reply_at + 60 s)`. A pending ticket counts toward the owner's load.
+5. **SKILL_REROUTE and MANUAL_ESCALATION mechanics.** At `planned_at` the ticket leaves the owner exactly as in a shift handover (release load, reassign in the same dispatch pass, or go to QUEUED/ESCALATED and wait). Reroute: TRANSFER, reason SKILL_REROUTE, active skill changes. Manual escalation: actor AGENT, same mechanics as SLA escalation below, reason MANUAL_ESCALATION.
+6. **SLA escalation.** `escalation_due_at` comes from 8.2. The ESCALATION_DUE event is evaluated after the dispatch pass at its timestamp. If the cycle was resolved at or before the due instant, nothing happens. If the ticket is owned (ASSIGNED or IN_PROGRESS) and the owner's tier is T1 or T2, it escalates now. If the ticket is QUEUED, ESCALATED or still unassigned after dispatch, it never escalates in this cycle. If it is PENDING_CUSTOMER, the check is repeated right after the customer reply, and cancelled if the pending ends in a silent resolution.
+   Escalation: status -> ESCALATED (actor SYSTEM, or AGENT for manual), the owner releases load, and the ticket waits in an ESCALATED spell. Dispatch assigns an agent whose tier is exactly the previous owner's tier + 1, who is a QUE-ESCALATION member, holds the active skill, satisfies language and capacity rules, and was not an owner earlier in the cycle (H7). The ESCALATE event has `from_agent_id`, queue QUE-ESCALATION, and status ESCALATED -> ASSIGNED. Remaining work carries over. At most one SLA escalation and one manual escalation per cycle. Dispatch and escalation checks repeat at the same timestamp until nothing changes.
+7. **Reopen.** The probability is evaluated per resolved cycle (7.7), using that cycle's `resolution_breached` (from the cycle's `resolution_due`), its TRANSFER count and whether it had an ESCALATE event. Delay: lognormal (median 6 h, sigma 0.8) truncated to (0, 72 h] by inverse-CDF sampling (`statistics.NormalDist`), whole seconds, at least 1 s. A reopen whose time falls after the cutoff is not emitted and the ticket stays RESOLVED. A reopened ticket never gets a CLOSED event for the earlier cycle. Reopen-cycle work median is 50% of the ticket's normal median. Cycle k > 1 uses RNG module name `handle_times_c<k>`. Cycle 1 keeps `handle_times`, with existing draw positions unchanged.
+8. **Event order at one timestamp.** RESOLVE and silent resolve, SHIFT_END, SHIFT_START, PENDING_REPLY, FALLBACK_DUE, PICKUP, MID_EVENT (pending start, reroute, manual escalation), REOPEN, ENQUEUE, then DISPATCH, then ESCALATION_DUE, then repeat DISPATCH and ESCALATION_DUE until no change. Existing relative ordering from Phase 3a is preserved.
 
 ## 8. SLA computation
 
@@ -472,9 +487,9 @@ The generator writes `docs/validation_summary.md` and `data/kpi_summary.json`. T
 | Metric | Target |
 |---|---|
 | Tickets / agents / messages | 30,000 / 100 / 100,000 (exact) |
-| After-hours arrivals | 12-25% |
+| After-hours arrivals | 8-20% |
 | P1 share | 4-8% |
-| Language fallback | 2-6% |
+| Language fallback | 5-12% |
 | Tickets with >= 1 transfer | 8-15% |
 | Tickets with an SLA escalation | 5-12% |
 | Reopen rate | 4-8% |
@@ -482,7 +497,7 @@ The generator writes `docs/validation_summary.md` and `data/kpi_summary.json`. T
 | Resolution breach rate | 5-12% |
 | Survey response rate | 30-40% |
 | Mean CSAT | 3.6-4.1 |
-| Mean agent utilisation (load / limit while on shift) | 35-55% |
+| Mean agent utilisation (time-weighted load / limit while on shift) | 10-25% (the volume-to-capacity ratio is fixed by 100 agents and 30,000 tickets) |
 | Max queue wait during a spike | Visibly higher than the daily median (reported per spike window) |
 
 KPI summary also reports SLA attainment and breach rate by channel and priority, median and 95th percentile wait, and per-intent volumes.
