@@ -6,11 +6,23 @@ venv/
 .DS_Store
 .idea/
 .vscode/
-# generated full-scale output is reproducible from the seed; keep only samples committed
+
+# Ignore generated datasets and intermediate files
+data/raw/
+data/staging/
+data/ground_truth/
+data/_clean/
+data/_anom/
 data/full/
 data/_check/
-data/raw/*.csv
-data/staging/*.csv
-data/ground_truth/*.csv
-data/staging/
-data/ground_truth/*.csv
+data/sql/
+
+# Allow sample data to be committed
+!data/sample/
+!data/sample/**
+
+data/seed.sql
+data/raw_json/
+data/_anom/
+data/_clean/
+data/MANIFEST.json

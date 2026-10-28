@@ -1,4 +1,0 @@
-channel_id,channel_name,is_realtime,calendar_code,message_type
-CHAT,Live Chat,true,CAL-CHAT,CHAT
-EMAIL,Email,false,CAL-EMAIL,EMAIL
-PHONE,Phone Support,true,CAL-PHONE,VOICE_TRANSCRIPT

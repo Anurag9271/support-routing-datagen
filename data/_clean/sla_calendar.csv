@@ -1,5 +1,0 @@
-calendar_code,calendar_name,timezone,effective_from,effective_to
-CAL-247,24/7 SLA Calendar (Mon-Sun 00:00-24:00 UTC),UTC,2026-01-05,
-CAL-CHAT,Chat SLA Calendar (Mon-Sun 06:00-22:00 UTC),UTC,2026-01-05,
-CAL-EMAIL,Email SLA Calendar (Mon-Fri 08:00-20:00 UTC),UTC,2026-01-05,
-CAL-PHONE,Phone SLA Calendar (Mon-Fri 09:00-18:00 UTC),UTC,2026-01-05,

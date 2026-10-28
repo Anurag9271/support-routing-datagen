@@ -344,6 +344,30 @@ def test_staging_files_not_touched_by_injection():
     assert hashes_before == hashes_after, "Staging files were modified by injection!"
 
 
+def test_only_intended_detection_rule_fires_per_anomaly(small_dataset, tmp_path: Path):
+    """Verify that each injected anomaly violates only its intended detection rule.
+    
+    Checks that the validator on the anomalous dataset detects exactly the intended
+    detection rule for each anomaly type, with 0 false positives or side-effect rule violations.
+    """
+    from collections import Counter
+    from validation.validate import Validator
+    all_tables = {**small_dataset["master"], **small_dataset["anomalous"]}
+    export_tables(all_tables, str(tmp_path))
+    validator = Validator(tmp_path)
+    validator.run_all_checks()
+
+    rule_counts = Counter(f.rule_id for f in validator.findings)
+    expected_rules = {
+        "V-SAFE-01": 3,
+        "V-SLA-01": 3,
+        "V-HIST-01": 3,
+        "V-LOOP-01": 3,
+        "V-ROUT-CAP-01": 3,
+    }
+    assert dict(rule_counts) == expected_rules, f"Unexpected rule findings: {dict(rule_counts)}"
+
+
 @pytest.mark.slow
 def test_staging_hashes_unchanged(tmp_path: Path) -> None:
     """Verify that staging hashes remain unchanged against existing fixtures (30k full scale)."""

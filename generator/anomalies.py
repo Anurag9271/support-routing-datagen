@@ -93,11 +93,96 @@ def inject_anomalies(
     agent_skill_df = master_tables["AgentSkill"]
     agent_lang_df = master_tables["AgentLanguage"]
     agent_shift_df = master_tables["AgentShift"]
+    queue_df = master_tables["Queue"]
+    queue_member_df = master_tables["QueueMember"]
     cal_windows_df = master_tables["SLACalendarWindow"]
     channel_df = master_tables["Channel"]
 
     channel_cal_map = dict(zip(channel_df["channel_id"], channel_df["calendar_code"]))
-    agent_concurrency_map = dict(zip(agent_df["agent_id"], agent_df["concurrency_limit"]))
+    agent_concurrency_map = dict(zip(agent_df["agent_id"], agent_df["concurrency_limit"].astype(int)))
+
+    tier_map = {"T1": 1, "T2": 2, "T3": 3}
+    prof_map = {"BASIC": 1, "PROFICIENT": 2, "EXPERT": 3}
+    agent_tier = {aid: tier_map.get(t, 1) for aid, t in zip(agent_df["agent_id"], agent_df["tier"])}
+    agent_status = dict(zip(agent_df["agent_id"], agent_df["status"]))
+    queue_min_tier = {qid: tier_map.get(t, 1) for qid, t in zip(queue_df["queue_id"], queue_df["min_tier"])}
+    agent_speaks = set(
+        agent_lang_df[agent_lang_df["fluency"].isin(["FLUENT", "NATIVE"])][
+            ["agent_id", "language_code"]
+        ].itertuples(index=False, name=None)
+    )
+
+    agent_shifts: dict[str, dict[int, tuple[int, int]]] = {}
+    for _, r in agent_shift_df.iterrows():
+        aid = str(r["agent_id"])
+        dow = int(r["day_of_week"])
+        h, m = map(int, str(r["start_time"]).split(":"))
+        eh, em = map(int, str(r["end_time"]).split(":"))
+        st = h * 3600 + m * 60
+        en = eh * 3600 + em * 60
+        dur = (en - st) % 86400 or 86400
+        agent_shifts.setdefault(aid, {})[dow] = (st, dur)
+
+    def is_agent_on_shift(aid: str, dt_obj: datetime.datetime) -> bool:
+        t_sec = int(dt_obj.replace(tzinfo=datetime.timezone.utc).timestamp())
+        ds = t_sec - t_sec % 86400
+        for off in (0, 1):
+            d0 = ds - off * 86400
+            dow = ((d0 // 86400) + 3) % 7 + 1
+            w = agent_shifts.get(aid, {}).get(dow)
+            if w:
+                s_t = d0 + w[0]
+                if s_t <= t_sec < s_t + w[1]:
+                    return True
+        return False
+
+    from collections import defaultdict
+    queue_members: dict[tuple[str, str], list[tuple[str, str]]] = defaultdict(list)
+    for _, r in queue_member_df.iterrows():
+        aid = str(r["agent_id"])
+        qid = str(r["queue_id"])
+        ef_from = str(r["effective_from"])
+        ef_to = str(r["effective_to"]) if pd.notna(r["effective_to"]) and str(r["effective_to"]) else "9999-12-31"
+        queue_members[(aid, qid)].append((ef_from, ef_to))
+
+    def is_in_queue(aid: str, qid: str, day_str: str) -> bool:
+        if agent_tier.get(aid, 1) < queue_min_tier.get(qid, 1):
+            return False
+        for f, to in queue_members.get((aid, qid), []):
+            if f <= day_str <= to:
+                return True
+        return False
+
+    agent_skills: dict[tuple[str, str], list[tuple[str, str, int]]] = defaultdict(list)
+    for _, r in agent_skill_df.iterrows():
+        aid = str(r["agent_id"])
+        skid = str(r["skill_id"])
+        ef_from = str(r["effective_from"])
+        ef_to = str(r["effective_to"]) if pd.notna(r["effective_to"]) and str(r["effective_to"]) else "9999-12-31"
+        prof = prof_map.get(str(r["proficiency"]), 1)
+        agent_skills[(aid, skid)].append((ef_from, ef_to, prof))
+
+    def has_skill(aid: str, skid: str, day_str: str, min_proficiency: int) -> bool:
+        for f, to, p in agent_skills.get((aid, skid), []):
+            if f <= day_str <= to and p >= min_proficiency:
+                return True
+        return False
+
+    def is_agent_eligible(
+        aid: str, qid: str, skid: str, lang: str, min_prof: int, dt_obj: datetime.datetime
+    ) -> bool:
+        if agent_status.get(aid) != "ACTIVE":
+            return False
+        if (aid, lang) not in agent_speaks:
+            return False
+        day_str = dt_obj.strftime("%Y-%m-%d")
+        if not is_in_queue(aid, qid, day_str):
+            return False
+        if not has_skill(aid, skid, day_str, min_prof):
+            return False
+        if not is_agent_on_shift(aid, dt_obj):
+            return False
+        return True
 
     used_tickets: set[str] = set()
     raw_gt_records: list[dict[str, Any]] = []
@@ -108,9 +193,15 @@ def inject_anomalies(
     # priority_reason_code = INTENT_DEFAULT; re-derive priority_rule_id and
     # SLAEvent targets and due times. Queue and assignments are left as they were.
     # -------------------------------------------------------------------------
+    tkt_lang_series = (
+        tkt_df["language_code"]
+        if "language_code" in tkt_df.columns
+        else pd.Series(["en"] * len(tkt_df), index=tkt_df.index)
+    )
     safety_cands = sorted(
         tkt_df[
             tkt_df["intent_id"].isin(["INT-008", "INT-009"])
+            & (tkt_lang_series == "en")
             & (~tkt_df["ticket_id"].isin(used_tickets))
         ]["ticket_id"].unique()
     )
@@ -305,47 +396,93 @@ def inject_anomalies(
 
     # -------------------------------------------------------------------------
     # 4. TRANSFER_LOOP (V-LOOP-01)
-    # Pick a ticket with handle time >= 60 min, reopen_count == 0, resolved.
-    # Insert A -> B -> A -> B transfers (reason SKILL_REROUTE) 5-20 minutes apart.
+    # Pick a ticket with handle time >= 60 min, reopen_count == 0, resolved,
+    # and a clean lifecycle.
+    # Insert A -> B -> A -> B transfers (reason SKILL_REROUTE) 10 minutes apart.
+    # Agent B is chosen strictly from agents that satisfy H1-H7 at event times.
     # -------------------------------------------------------------------------
-    res_time_num = pd.to_numeric(res_df["time_to_resolve_minutes"], errors="coerce")
-    loop_cands = sorted(
-        res_df[
-            (res_df["cycle_no"] == 1)
-            & (res_time_num >= 60.0)
-            & (~res_df["ticket_id"].isin(used_tickets))
-        ]["ticket_id"].unique()
-    )
+    st_flow = st_df.groupby("ticket_id")["to_status"].apply(list).to_dict()
+    clean_flow_tickets = {
+        tid for tid, seq in st_flow.items()
+        if seq == ["NEW", "QUEUED", "ASSIGNED", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+    }
+
+    tkt_meta = tkt_df.set_index("ticket_id").to_dict("index")
+    asn_first_map = asn_df[asn_df["seq_no"] == 1].set_index("ticket_id").to_dict("index")
+    res_time_map = dict(zip(res_df["ticket_id"], pd.to_numeric(res_df["time_to_resolve_minutes"], errors="coerce")))
+    res_dt_map = dict(zip(res_df["ticket_id"], res_df["resolved_at"]))
+    inp_events = st_df[st_df["to_status"] == "IN_PROGRESS"].set_index("ticket_id")["event_at"].to_dict()
+
+    loop_cands: list[str] = []
+    loop_cand_agents: dict[str, list[str]] = {}
+
+    for tid in sorted(clean_flow_tickets):
+        if tid in used_tickets:
+            continue
+        if res_time_map.get(tid, 0.0) < 60.0:
+            continue
+        if tid not in inp_events:
+            continue
+        a_row = asn_first_map.get(tid)
+        t_row = tkt_meta.get(tid)
+        if not a_row or not t_row:
+            continue
+
+        agent_a = str(a_row["agent_id"])
+        qid = str(a_row["queue_id"])
+        skid = str(a_row["required_skill_id"])
+        prio = str(t_row["priority_level"])
+        lang = str(t_row["language_code"])
+        min_prof = 2 if prio in ("P1", "P2") else 1
+
+        t_inp_dt = _iso_to_dt(str(inp_events[tid]))
+        t_res_dt = _iso_to_dt(str(res_dt_map[tid]))
+        t1_dt = t_inp_dt + timedelta(minutes=10)
+        t2_dt = t_inp_dt + timedelta(minutes=20)
+        t3_dt = t_inp_dt + timedelta(minutes=30)
+
+        if t3_dt + timedelta(seconds=120) >= t_res_dt:
+            continue
+
+        # Agent A must be eligible at t2
+        if not is_agent_eligible(agent_a, qid, skid, lang, min_prof, t2_dt):
+            continue
+
+        # Eligible B != A
+        valid_b = []
+        for aid in sorted(agent_df["agent_id"].unique()):
+            if aid == agent_a:
+                continue
+            if is_agent_eligible(aid, qid, skid, lang, min_prof, t1_dt) and is_agent_eligible(aid, qid, skid, lang, min_prof, t3_dt):
+                valid_b.append(aid)
+
+        if valid_b:
+            loop_cands.append(tid)
+            loop_cand_agents[tid] = valid_b
+
     loop_target = min(targets["TRANSFER_LOOP"], len(loop_cands))
     loop_perm = rng.permutation(len(loop_cands))
     selected_loop = [loop_cands[i] for i in loop_perm[:loop_target]]
     used_tickets.update(selected_loop)
 
-    # Active agent pool
-    active_agent_ids = sorted(agent_df[agent_df["status"] == "ACTIVE"]["agent_id"].unique())
-
     new_asns: list[dict[str, Any]] = []
     new_statuses: list[dict[str, Any]] = []
 
     for tid in selected_loop:
-        t_asns = asn_df[asn_df["ticket_id"] == tid].sort_values("seq_no")
-        first_asn = t_asns.iloc[0]
-        agent_a = str(first_asn["agent_id"])
-        queue_id = str(first_asn["queue_id"])
-        required_skill = str(first_asn["required_skill_id"])
-        t_assign_dt = _iso_to_dt(str(first_asn["event_at"]))
+        a_row = asn_first_map[tid]
+        agent_a = str(a_row["agent_id"])
+        queue_id = str(a_row["queue_id"])
+        required_skill = str(a_row["required_skill_id"])
+        t_inp_dt = _iso_to_dt(str(inp_events[tid]))
 
-        # Pick eligible agent B != A
-        possible_b = [ag for ag in active_agent_ids if ag != agent_a]
+        possible_b = loop_cand_agents[tid]
         b_idx = int(rng.integers(0, len(possible_b)))
         agent_b = possible_b[b_idx]
 
-        # 3 transfers: t1 (A->B), t2 (B->A), t3 (A->B)
-        t1_dt = t_assign_dt + timedelta(minutes=10)
-        t2_dt = t1_dt + timedelta(minutes=10)
-        t3_dt = t2_dt + timedelta(minutes=10)
+        t1_dt = t_inp_dt + timedelta(minutes=10)
+        t2_dt = t_inp_dt + timedelta(minutes=20)
+        t3_dt = t_inp_dt + timedelta(minutes=30)
 
-        # Create transfer AssignmentEvents
         asn_2_id = f"ASN-{tid}-002"
         asn_3_id = f"ASN-{tid}-003"
         asn_4_id = f"ASN-{tid}-004"
@@ -408,7 +545,6 @@ def inject_anomalies(
         ]
         new_asns.extend(transfer_asns)
 
-        # Status events for transfers
         new_statuses.extend([
             {
                 "status_event_id": "",
@@ -491,15 +627,27 @@ def inject_anomalies(
             res_df.at[res_idx, "resolved_by_agent_id"] = agent_b
             res_df.at[res_idx, "transfer_count"] = int(res_df.at[res_idx, "transfer_count"]) + 3
 
-        # Update Message owner if agent message sent after t3
+        # Update RESOLVED status event actor
+        res_st_matches = st_df[(st_df["ticket_id"] == tid) & (st_df["to_status"] == "RESOLVED")].index
+        for r_idx in res_st_matches:
+            st_df.at[r_idx, "actor_agent_id"] = agent_b
+
+        # Update Message owner according to active agent in each window
+        t1_iso = _dt_to_iso(t1_dt)
+        t2_iso = _dt_to_iso(t2_dt)
         t3_iso = _dt_to_iso(t3_dt)
         agent_msgs = msg_df[
             (msg_df["ticket_id"] == tid)
             & (msg_df["sender_type"] == "AGENT")
-            & (msg_df["sent_at"] >= t3_iso)
         ].index
         for m_idx in agent_msgs:
-            msg_df.at[m_idx, "sender_agent_id"] = agent_b
+            m_sent = str(msg_df.at[m_idx, "sent_at"])
+            if t1_iso <= m_sent < t2_iso:
+                msg_df.at[m_idx, "sender_agent_id"] = agent_b
+            elif t2_iso <= m_sent < t3_iso:
+                msg_df.at[m_idx, "sender_agent_id"] = agent_a
+            elif m_sent >= t3_iso:
+                msg_df.at[m_idx, "sender_agent_id"] = agent_b
 
         raw_gt_records.append({
             "issue_type": "TRANSFER_LOOP",
@@ -517,7 +665,6 @@ def inject_anomalies(
     if new_asns:
         asn_df = pd.concat([asn_df, pd.DataFrame(new_asns)], ignore_index=True)
         asn_df = asn_df.sort_values(["ticket_id", "cycle_no", "event_at"]).reset_index(drop=True)
-        # Re-sequence seq_no and assignment_id
         asn_df["seq_no"] = asn_df.groupby("ticket_id").cumcount() + 1
         asn_df["assignment_id"] = (
             "ASN-" + asn_df["ticket_id"] + "-" + asn_df["seq_no"].map(lambda s: f"{s:03d}")
@@ -526,7 +673,6 @@ def inject_anomalies(
     if new_statuses:
         st_df = pd.concat([st_df, pd.DataFrame(new_statuses)], ignore_index=True)
         st_df = st_df.sort_values(["ticket_id", "cycle_no", "event_at"]).reset_index(drop=True)
-        # Re-sequence seq_no and status_event_id
         st_df["seq_no"] = st_df.groupby("ticket_id").cumcount() + 1
         st_df["status_event_id"] = (
             "TSE-" + st_df["ticket_id"] + "-" + st_df["seq_no"].map(lambda s: f"{s:03d}")
@@ -534,18 +680,42 @@ def inject_anomalies(
 
     # -------------------------------------------------------------------------
     # 5. AGENT_OVER_CAPACITY (V-ROUT-CAP-01)
-    # Pick an ASSIGN event where the best eligible agent already has load_before = limit.
-    # Reassign the event to that agent and recompute loads. Choose cases where
-    # the ticket's open interval is short.
+    # Pick an ASSIGN event where an eligible agent is chosen so that the ONLY
+    # violated rule is concurrency limit (agent is on shift, holds skill, is
+    # queue member, and speaks the language).
     # -------------------------------------------------------------------------
-    res_time_num = pd.to_numeric(res_df["time_to_resolve_minutes"], errors="coerce")
-    cap_cands = sorted(
-        res_df[
-            (res_df["cycle_no"] == 1)
-            & (res_time_num <= 20.0)
-            & (~res_df["ticket_id"].isin(used_tickets))
-        ]["ticket_id"].unique()
-    )
+    cap_cands: list[str] = []
+    cap_cand_agents: dict[str, list[str]] = {}
+
+    for tid in sorted(clean_flow_tickets):
+        if tid in used_tickets:
+            continue
+        if res_time_map.get(tid, 999.0) > 20.0:
+            continue
+        a_row = asn_first_map.get(tid)
+        t_row = tkt_meta.get(tid)
+        if not a_row or not t_row:
+            continue
+
+        orig_aid = str(a_row["agent_id"])
+        qid = str(a_row["queue_id"])
+        skid = str(a_row["required_skill_id"])
+        prio = str(t_row["priority_level"])
+        lang = str(t_row["language_code"])
+        min_prof = 2 if prio in ("P1", "P2") else 1
+        t_assign_dt = _iso_to_dt(str(a_row["event_at"]))
+
+        valid_x = []
+        for aid in sorted(agent_df["agent_id"].unique()):
+            if aid == orig_aid:
+                continue
+            if is_agent_eligible(aid, qid, skid, lang, min_prof, t_assign_dt):
+                valid_x.append(aid)
+
+        if valid_x:
+            cap_cands.append(tid)
+            cap_cand_agents[tid] = valid_x
+
     cap_target = min(targets["AGENT_OVER_CAPACITY"], len(cap_cands))
     cap_perm = rng.permutation(len(cap_cands))
     selected_cap = [cap_cands[i] for i in cap_perm[:cap_target]]
@@ -558,8 +728,7 @@ def inject_anomalies(
         asn_idx = asn_matches[0]
         orig_agent = str(asn_df.at[asn_idx, "agent_id"])
 
-        # Choose agent X != orig_agent
-        possible_x = [ag for ag in active_agent_ids if ag != orig_agent]
+        possible_x = cap_cand_agents[tid]
         x_idx = int(rng.integers(0, len(possible_x)))
         agent_x = possible_x[x_idx]
         limit_x = agent_concurrency_map.get(agent_x, 4)

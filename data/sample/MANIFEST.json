@@ -1,0 +1,127 @@
+{
+  "cli_arguments": [
+    "--seed",
+    "20261022",
+    "--tickets",
+    "300",
+    "--agents",
+    "20",
+    "--customers",
+    "120",
+    "--messages",
+    "1000",
+    "--out",
+    "data/sample",
+    "--formats",
+    "csv"
+  ],
+  "files": {
+    "Agent": {
+      "filename": "agent.csv",
+      "row_count": 20,
+      "sha256": "77635327078384d280e1668914efb6328e107572469f68a56dae4ddc6533a2bc"
+    },
+    "AgentLanguage": {
+      "filename": "agent_language.csv",
+      "row_count": 33,
+      "sha256": "6e490466949bd536d24181e359ebc95424b4ca32286dadc5fea8a0ec84b494e1"
+    },
+    "AgentShift": {
+      "filename": "agent_shift.csv",
+      "row_count": 100,
+      "sha256": "b796e6d309f4a1509a744358a0e93de55b47ec34dc0dfe32acc9606d281cbe50"
+    },
+    "AgentSkill": {
+      "filename": "agent_skill.csv",
+      "row_count": 50,
+      "sha256": "029dc1a9af6b7423ef04db4e7aa660a40197656d3cd835b706443925fab20e7f"
+    },
+    "AssignmentEvent": {
+      "filename": "assignment_event.csv",
+      "row_count": 379,
+      "sha256": "7d2f848b19e9adcb8728a1a2ac2a127933319771b6ff4e7b50e8ace56de602ad"
+    },
+    "Channel": {
+      "filename": "channel.csv",
+      "row_count": 3,
+      "sha256": "83266f2c545bf0cd140047cd378b17c50840f6c4f95c8060a187fb9f80877838"
+    },
+    "Customer": {
+      "filename": "customer.csv",
+      "row_count": 120,
+      "sha256": "a9e7b49f11663c038718479508dd71a6065a59013a0917e0294b66c3deeaf739"
+    },
+    "Intent": {
+      "filename": "intent.csv",
+      "row_count": 12,
+      "sha256": "0c79f1d23ae01eed76b30c45d727d7882d9d4ee29c9491b1677be786a960d74a"
+    },
+    "Language": {
+      "filename": "language.csv",
+      "row_count": 5,
+      "sha256": "91716c3ef05b843bd0b588b84b0b9910da18b21e617630506a31a4a916bbc6e7"
+    },
+    "Message": {
+      "filename": "message.csv",
+      "row_count": 1000,
+      "sha256": "d9a1cd2d0f856262c456e9eacdc1c026383a9c13c72920caae9ca2b3b632c78a"
+    },
+    "PriorityRule": {
+      "filename": "priority_rule.csv",
+      "row_count": 8,
+      "sha256": "eed6267c329df8643fa02d58ef944037f6078fd60b17d3de5da897730420999c"
+    },
+    "Queue": {
+      "filename": "queue.csv",
+      "row_count": 7,
+      "sha256": "904fbfde883abd538005c4b8826c87e09c90218218c06177243466a7e9da3f9f"
+    },
+    "QueueMember": {
+      "filename": "queue_member.csv",
+      "row_count": 58,
+      "sha256": "1e9dcf3c54289702568a9bd392bc30d2dbc6907199631b8e80ca43a4347153f7"
+    },
+    "Resolution": {
+      "filename": "resolution.csv",
+      "row_count": 308,
+      "sha256": "950a01054684410057135f33c3e0eabd74bceb40945cd4063bed8e409028d921"
+    },
+    "SLACalendar": {
+      "filename": "sla_calendar.csv",
+      "row_count": 4,
+      "sha256": "e55c4b1190dffe24f698c85e2e0de0c7f55636b89dfb25f25a96447cfb50ad98"
+    },
+    "SLACalendarWindow": {
+      "filename": "sla_calendar_window.csv",
+      "row_count": 24,
+      "sha256": "2150547175657fe6c91bdfaf2d208f70f3d95367acd5570362347bb360d07c4a"
+    },
+    "SLAEvent": {
+      "filename": "sla_event.csv",
+      "row_count": 311,
+      "sha256": "af17d87d69533c61abb18d66b255c23014d84cf5d2826345bd6a326ede57cfdd"
+    },
+    "Skill": {
+      "filename": "skill.csv",
+      "row_count": 6,
+      "sha256": "6d94435a8a7daf2ddcd63a8db19d6dd4b79305398cd17f48af4a4eb64cdbfcbd"
+    },
+    "Ticket": {
+      "filename": "ticket.csv",
+      "row_count": 300,
+      "sha256": "fc6df4777a15a6502376e1c6851b09cc5e8512e1721934d4220bed0731c17fb4"
+    },
+    "TicketStatusEvent": {
+      "filename": "ticket_status_event.csv",
+      "row_count": 2061,
+      "sha256": "e5850cb7d21554e50a630ae1e09ef142b6d6d0b25d832c303411b1e037f4b6d6"
+    },
+    "ground_truth": {
+      "filename": "ground_truth.csv",
+      "row_count": 15,
+      "sha256": "55073a1bcb5694d9d05cd4d55d97d7716e91d66b97ac24402b2c0ae0acf9f02f"
+    }
+  },
+  "generator_version": "1.0.0",
+  "seed": 20261022
+}
